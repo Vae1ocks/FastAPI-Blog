@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "fastapi-blog"
+version = "0.1.0"
+description = ""
+authors = ["Vae1ocks <antondobranickij@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = "^0.115.0"
+sqlalchemy = {extras = ["asyncio"], version = "^2.0.35"}
+asyncpg = "^0.29.0"
+pydantic-settings = "^2.5.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
