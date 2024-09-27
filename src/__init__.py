@@ -1,6 +1,5 @@
 __all__ = (
     'Base',
-
 )
 
-from database import Base
+from models import Base
