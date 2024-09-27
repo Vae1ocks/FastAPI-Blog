@@ -1,11 +1,37 @@
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, declared_attr
+from asyncio import current_task
+
+from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, async_scoped_session
+
+from .config import settings
 
 
-class Base(DeclarativeBase):
-    __abstract__ = True
+class Database:
+    def __init__(self, url, echo: bool = False):
+        self.engine = create_async_engine(
+            url=url,
+            echo=echo,
+        )
+        self.session_factory = async_sessionmaker(
+            bind=self.engine,
+            autoflush=False,
+            autocommit=False,
+            expire_on_commit=False,
+        )
 
-    @declared_attr.directive
-    def __tablename__(cls):
-        return f"{cls.__name__.lower()}s"
+    def get_scoped_session(self):
+        session = async_scoped_session(
+            session_factory=self.session_factory,
+            scopefunc=current_task
+        )
+        return session
 
-    id: Mapped[int] = mapped_column(primary_key=True)
+    async def session_dependency(self):
+        async with self.get_scoped_session() as session:
+            yield session
+            await session.remove()
+
+
+database = Database(
+    url=settings.db.url,
+    echo=settings.db.echo,
+)
