@@ -28,7 +28,7 @@ class DatabaseSettings(BaseSettingsConfig):
     password: str
 
     class Config:
-        env_prefix = 'db_'
+        env_prefix = "db_"
 
 
 class Settings(BaseSettings):

@@ -1,6 +1,10 @@
 from asyncio import current_task
 
-from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, async_scoped_session
+from sqlalchemy.ext.asyncio import (
+    create_async_engine,
+    async_sessionmaker,
+    async_scoped_session,
+)
 
 from .config import settings
 
@@ -21,7 +25,7 @@ class Database:
     def get_scoped_session(self):
         session = async_scoped_session(
             session_factory=self.session_factory,
-            scopefunc=current_task
+            scopefunc=current_task,
         )
         return session
 
