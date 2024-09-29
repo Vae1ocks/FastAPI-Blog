@@ -15,8 +15,8 @@ class DatabaseSettings(BaseSettingsConfig):
     @property
     def url(self) -> PostgresDsn:
         return (
-            f"postgresql+asyncpg://{self.db_user}:{self.db_password}"
-            f"@{self.db_host}:{self.db_port}/{self.db_name}"
+            f"postgresql+asyncpg://{self.user}:{self.password}"
+            f"@{self.host}:{self.port}/{self.name}"
         )
 
     echo: bool = False
@@ -26,6 +26,9 @@ class DatabaseSettings(BaseSettingsConfig):
     name: str
     user: str
     password: str
+
+    class Config:
+        env_prefix = 'db_'
 
 
 class Settings(BaseSettings):
