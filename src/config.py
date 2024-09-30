@@ -9,6 +9,7 @@ BASE_DIR = Path(__file__).parent.parent
 class BaseSettingsConfig(BaseSettings):
     class Config:
         env_file = f"{BASE_DIR}/.env"
+        extra = "ignore"
 
 
 class DatabaseSettings(BaseSettingsConfig):
@@ -28,11 +29,19 @@ class DatabaseSettings(BaseSettingsConfig):
     password: str
 
     class Config:
-        env_prefix = "db_"
+        env_prefix = "DB_"
+
+
+class JWTSettings(BaseSettingsConfig):
+    secret: str
+
+    class Config:
+        env_prefix = "JWT_"
 
 
 class Settings(BaseSettings):
     db: DatabaseSettings = DatabaseSettings()
+    jwt: JWTSettings = JWTSettings()
 
 
 settings = Settings()
