@@ -14,6 +14,8 @@ pydantic-settings = "^2.5.2"
 alembic = "^1.13.3"
 black = "^24.8.0"
 fastapi-users = {extras = ["sqlalchemy"], version = "^13.0.0"}
+uvicorn = "^0.31.0"
+itsdangerous = "^2.2.0"
 
 
 [build-system]
