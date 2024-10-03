@@ -1,15 +1,13 @@
-from typing import TYPE_CHECKING
-
-from fastapi_users_db_sqlalchemy import SQLAlchemyUserDatabase
-from fastapi_users.db import SQLAlchemyBaseUserTable
+from sqlalchemy import String
+from sqlalchemy.orm import Mapped, mapped_column
 
 from src.models import Base
 
-if TYPE_CHECKING:
-    from sqlalchemy.ext.asyncio import AsyncSession
 
+class User(Base):
+    email: Mapped[str] = mapped_column(unique=True)
+    username: Mapped[str] = mapped_column(String(50), unique=True)
 
-class User(Base, SQLAlchemyBaseUserTable[int]):
-    @classmethod
-    def get_db(cls, session: AsyncSession):
-        return SQLAlchemyUserDatabase(session, cls)
+    is_active: Mapped[bool] = mapped_column(default=True, server_default="true")
+    is_verified: Mapped[bool] = mapped_column(default=False, server_default="false")
+    is_superuser: Mapped[bool] = mapped_column(default=False, server_default="false")
