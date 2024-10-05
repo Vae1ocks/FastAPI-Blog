@@ -1,8 +1,16 @@
-from datetime import datetime, timedelta, UTC
-
 import jwt
 import bcrypt
+from datetime import datetime, timedelta, UTC
 
+from fastapi.exceptions import HTTPException
+from fastapi import status
+
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select
+from sqlalchemy.orm import Mapped
+
+from src import User
+from .schemas import CreateUser
 from src.config import settings
 
 
@@ -46,3 +54,38 @@ def validate_password(
         password.encode(),
         hashed_password,
     )
+
+
+# TODO: Отправка кода на почту
+async def registrate_not_verified_user(
+    data: CreateUser,
+    session: AsyncSession,
+) -> int:
+    """
+    Служит для создания пользователя с неподтверждённым email,
+    отправляет код подтверждения на почту.
+    """
+
+    result = await session.execute(
+        select(User).filter(User.email == data.email),
+    )
+
+    if not (user := result.scalar_one_or_none()):
+        hashed_password = hash_password(data.password).decode()
+        user = User(
+            **data.model_dump(exclude={"password"}),
+            password=hashed_password,
+            is_active=True,
+            is_confirmed=False,
+            is_superuser=False,
+        )
+        session.add(user)
+        await session.commit()
+        await session.refresh(user)
+
+    elif user.is_confirmed:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="The user already exists and is confirmed.",
+        )
+    return user.id
