@@ -1,5 +1,8 @@
+from typing import Tuple
+
 import jwt
 import bcrypt
+import random
 from datetime import datetime, timedelta, UTC
 
 from fastapi.exceptions import HTTPException
@@ -10,7 +13,8 @@ from sqlalchemy import select
 from sqlalchemy.orm import Mapped
 
 from src import User
-from .schemas import CreateUser
+from .schemas import CreateUser, UserRead
+from .tasks import send_mail_code
 from src.config import settings
 
 
@@ -56,11 +60,10 @@ def validate_password(
     )
 
 
-# TODO: Отправка кода на почту
 async def registrate_not_verified_user(
     data: CreateUser,
     session: AsyncSession,
-) -> int:
+) -> tuple[int, int]:
     """
     Служит для создания пользователя с неподтверждённым email,
     отправляет код подтверждения на почту.
@@ -88,4 +91,14 @@ async def registrate_not_verified_user(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="The user already exists and is confirmed.",
         )
-    return user.id
+    code = random.randint(100000, 999999)
+    send_mail_code.delay(email=data.email, code=code)
+    return user.id, code
+
+
+async def confirm_user(user_id: int, session: AsyncSession,) -> User:
+    user = await session.get(User, user_id)
+    user.is_confirmed = True
+    await session.commit()
+    return user
+
