@@ -60,11 +60,22 @@ class RedisSettings(BaseSettingsConfig):
         env_prefix = "REDIS_"
 
 
+class SMTPSettings(BaseSettingsConfig):
+    host: str
+    host_user: str
+    host_password: str
+    port: str
+
+    class Config:
+        env_prefix = "SMTP_"
+
+
 class Settings(BaseSettings):
     db: DatabaseSettings = DatabaseSettings()
     jwt: JWTSettings = JWTSettings()
     session: SessionSettings = SessionSettings()
     redis: RedisSettings = RedisSettings()
+    smtp: SMTPSettings = SMTPSettings()
 
 
 settings = Settings()
