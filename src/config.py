@@ -41,9 +41,16 @@ class JWTSettings(BaseSettingsConfig):
         env_prefix = "JWT_"
 
 
+class SessionSettings(BaseSettingsConfig):
+    secret: str
+
+    class Config:
+        env_prefix = "SESSION_"
+
+
 class Settings(BaseSettings):
     db: DatabaseSettings = DatabaseSettings()
     jwt: JWTSettings = JWTSettings()
-
+    session: SessionSettings = SessionSettings()
 
 settings = Settings()
