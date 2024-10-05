@@ -1,5 +1,5 @@
 from pydantic_settings import BaseSettings
-from pydantic import PostgresDsn
+from pydantic import PostgresDsn, RedisDsn
 
 from pathlib import Path
 
@@ -34,7 +34,7 @@ class DatabaseSettings(BaseSettingsConfig):
 
 class JWTSettings(BaseSettingsConfig):
     secret: str
-    algorithm: str = 'HS256'
+    algorithm: str = "HS256"
     access_token_expire_minutes: int = 5
 
     class Config:
@@ -48,9 +48,23 @@ class SessionSettings(BaseSettingsConfig):
         env_prefix = "SESSION_"
 
 
+class RedisSettings(BaseSettingsConfig):
+    port: str
+    host: str
+
+    @property
+    def url(self) -> RedisDsn:
+        return f"redis://{self.host}:{self.port}"
+
+    class Config:
+        env_prefix = "REDIS_"
+
+
 class Settings(BaseSettings):
     db: DatabaseSettings = DatabaseSettings()
     jwt: JWTSettings = JWTSettings()
     session: SessionSettings = SessionSettings()
+    redis: RedisSettings = RedisSettings()
+
 
 settings = Settings()
