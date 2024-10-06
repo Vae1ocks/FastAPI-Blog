@@ -6,7 +6,7 @@ from src.models import Base
 
 class User(Base):
     email: Mapped[str] = mapped_column(unique=True)
-    username: Mapped[str] = mapped_column(String(50), unique=True)
+    username: Mapped[str] = mapped_column(String(25), unique=True)
     password: Mapped[str]
 
     is_active: Mapped[bool] = mapped_column(default=True, server_default="true")
@@ -17,3 +17,10 @@ class User(Base):
     def validate_password(self, key, value):
         if len(value) < 8:
             raise ValueError("Password must be at least 8 characters long")
+
+    @validates('username')
+    def validate_username(self, key, value):
+        if len(value) < 3:
+            raise ValueError('Username must be at least 3 characters long')
+        elif len(value) > 25:
+            raise ValueError('Username must be up to 25 characters')
