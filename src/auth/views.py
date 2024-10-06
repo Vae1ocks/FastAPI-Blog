@@ -29,7 +29,7 @@ async def registration_user_data_input(
     return {"detail": "continue the registration"}
 
 
-@router.post("/confirmation")
+@router.post("/confirmation", response_model=UserRead)
 async def registration_confirmation(
     request: Request,
     code: Code,
@@ -57,5 +57,4 @@ async def registration_confirmation(
         )
 
     user = await confirm_user(user_id=user_id, session=session)
-    user_read = UserRead.model_validate(user)
-    return user_read
+    return user

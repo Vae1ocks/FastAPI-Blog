@@ -96,9 +96,16 @@ async def registrate_not_verified_user(
     return user.id, code
 
 
-async def confirm_user(user_id: int, session: AsyncSession,) -> User:
+async def confirm_user(
+    user_id: int,
+    session: AsyncSession,
+) -> User:
     user = await session.get(User, user_id)
+    if user is None:
+        raise HTTPException(
+            status.HTTP_400_BAD_REQUEST,
+            "Incorrect registration data",
+        )
     user.is_confirmed = True
     await session.commit()
     return user
-
