@@ -19,4 +19,4 @@ class UserRead(BaseUser):
 
 
 class Code(BaseModel):
-    code: str
+    code: int

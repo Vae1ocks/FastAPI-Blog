@@ -17,6 +17,7 @@ class User(Base):
     def validate_password(self, key, value):
         if len(value) < 8:
             raise ValueError("Password must be at least 8 characters long")
+        return value
 
     @validates('username')
     def validate_username(self, key, value):
@@ -24,3 +25,4 @@ class User(Base):
             raise ValueError('Username must be at least 3 characters long')
         elif len(value) > 25:
             raise ValueError('Username must be up to 25 characters')
+        return value

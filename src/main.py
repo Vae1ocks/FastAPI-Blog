@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from starlette.middleware.sessions import SessionMiddleware
 
 from src.config import settings
-from auth.views import router as auth_router
+from .auth.views import router as auth_router
 
 import uvicorn
 
