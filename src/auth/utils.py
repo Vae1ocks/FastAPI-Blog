@@ -45,6 +45,30 @@ def decode_jwt(
     return decoded
 
 
+def create_access_token(user: User) -> str:
+    payload = {
+        "type": settings.jwt.access_token_type,
+        "sub": user.id,
+    }
+    return encode_jwt(
+        payload=payload,
+        expire_minutes=settings.jwt.access_token_lifespan_minutes,
+    )
+
+
+def create_refresh_token(user: User) -> str:
+    payload = {
+        "type": settings.jwt.refresh_token_type,
+        "sub": user.id
+    }
+    return encode_jwt(
+        payload=payload,
+        expire_timedelta=timedelta(
+            days=settings.jwt.refresh_token_lifespan_days,
+        ),
+    )
+
+
 def hash_password(password: str) -> bytes:
     salt = bcrypt.gensalt()
     return bcrypt.hashpw(password.encode(), salt)

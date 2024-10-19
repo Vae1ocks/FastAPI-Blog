@@ -32,3 +32,9 @@ class UserLogin(BaseModel):
 
 class Code(BaseModel):
     code: int
+
+
+class TokenInfo(BaseModel):
+    access_token: str
+    refresh_token: str
+    token_type: str = "Bearer"
