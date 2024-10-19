@@ -109,13 +109,3 @@ async def confirm_user(
     user.is_confirmed = True
     await session.commit()
     return user
-
-
-async def get_user(user_id: int, session: AsyncSession) -> User:
-    user = await session.get(User, user_id)
-    if user is None:
-        raise HTTPException(
-            status.HTTP_401_UNAUTHORIZED,
-            "Incorrect user data",
-        )
-    return user
