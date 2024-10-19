@@ -9,7 +9,7 @@ from fastapi.exceptions import HTTPException
 from fastapi import status
 
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
+from sqlalchemy import select, Result
 from sqlalchemy.orm import Mapped
 
 from src import User
@@ -22,7 +22,7 @@ def encode_jwt(
     payload: dict,
     secret: str = settings.jwt.secret,
     algorithm: str = settings.jwt.algorithm,
-    expire_minutes: int = settings.jwt.access_token_expire_minutes,
+    expire_minutes: int = settings.jwt.access_token_lifespan_minutes,
     expire_timedelta: timedelta | None = None,
 ) -> str:
     to_encode = payload.copy()
@@ -52,11 +52,11 @@ def hash_password(password: str) -> bytes:
 
 def validate_password(
     password: str,
-    hashed_password: bytes,
+    hashed_password: str,
 ) -> bool:
     return bcrypt.checkpw(
         password.encode(),
-        hashed_password,
+        hashed_password.encode(),
     )
 
 
@@ -108,4 +108,14 @@ async def confirm_user(
         )
     user.is_confirmed = True
     await session.commit()
+    return user
+
+
+async def get_user(user_id: int, session: AsyncSession) -> User:
+    user = await session.get(User, user_id)
+    if user is None:
+        raise HTTPException(
+            status.HTTP_401_UNAUTHORIZED,
+            "Incorrect user data",
+        )
     return user
