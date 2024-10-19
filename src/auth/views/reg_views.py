@@ -1,10 +1,9 @@
 from fastapi import APIRouter, Depends, status, Request, HTTPException
-from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.database import database
-from .schemas import UserRead, CreateUser, Code
-from .utils import registrate_not_verified_user, confirm_user
+from src.auth.schemas import UserRead, CreateUser, Code
+from src.auth.utils import registrate_not_verified_user, confirm_user
 
 
 router = APIRouter(

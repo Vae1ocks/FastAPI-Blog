@@ -35,7 +35,8 @@ class DatabaseSettings(BaseSettingsConfig):
 class JWTSettings(BaseSettingsConfig):
     secret: str
     algorithm: str = "HS256"
-    access_token_expire_minutes: int = 5
+    access_token_lifespan_minutes: str = 5
+    refresh_token_lifespan_days: str = 15
 
     class Config:
         env_prefix = "JWT_"
