@@ -11,6 +11,7 @@ from src.database import database
 from . import utils
 from .schemas import UserLogin, UserRead
 from .models import User
+from src.config import settings
 
 http_bearer = HTTPBearer()
 
@@ -67,6 +68,11 @@ async def get_current_user(
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Token invalid.",
+        )
+    if payload.get("type") != settings.jwt.access_token_type:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token type incorrect: expected access token.",
         )
     user = await session.get(User, payload["sub"])
     if not user:
