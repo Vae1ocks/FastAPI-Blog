@@ -28,7 +28,7 @@ async def registration_user_data_input(
         session=session,
     )
     request.session["registration"] = {"user_id": user_id, "confirmation_code": code}
-    return {"detail": "continue the registration"}
+    return {"detail": "Continue the registration"}
 
 
 @router.post("/confirmation", response_model=UserRead)
@@ -42,8 +42,8 @@ async def registration_confirmation(
     reg_data = request.session.get("registration")
     if not reg_data:
         raise HTTPException(
-            status.HTTP_400_BAD_REQUEST,
-            "registration data is not provided",
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Registration data is not provided",
         )
     compare_expected_session_code_and_provided(
         data=reg_data,
