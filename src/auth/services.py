@@ -105,7 +105,9 @@ async def registrate_not_verified_user_and_send_code(
     """
 
     result = await session.execute(
-        select(User).filter(User.email == data.email),
+        select(User).filter(
+            (User.email == data.email) | (User.username == data.username),
+        ),
     )
 
     if not (user := result.scalar_one_or_none()):
@@ -122,9 +124,11 @@ async def registrate_not_verified_user_and_send_code(
         await session.refresh(user)
 
     elif user.is_confirmed:
+        repeated_value = "email" if user.email == data.email else "username"
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="The user already exists and is confirmed.",
+            detail=f"The user with provided {repeated_value} "
+                   f"already exists and is confirmed.",
         )
     code = send_random_code_to_email(email=data.email)
     return user.id, code
