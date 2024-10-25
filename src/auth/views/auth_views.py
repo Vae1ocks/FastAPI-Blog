@@ -1,13 +1,22 @@
-from fastapi import APIRouter, Depends, Body
+from fastapi import APIRouter, Depends, Body, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.auth.models import User
 from src.database import database
-from src.auth.schemas import UserLogin, TokenInfo
+from src.auth.schemas import (
+    UserLogin,
+    TokenInfo,
+    UserEmailOrUsername,
+    PasswordAndCodeScheme,
+)
 from src.auth.utils import (
+    send_random_code_to_email,
+)
+from src.auth.services import (
     create_access_token,
     create_refresh_token,
     refresh_access_token,
+    get_active_user_by_email_or_username,
 )
 from src.auth.dependencies import validate_auth_user
 
