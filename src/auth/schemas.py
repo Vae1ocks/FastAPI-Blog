@@ -18,16 +18,19 @@ class UserRead(BaseUser):
         from_attributes = True
 
 
-class UserLogin(BaseModel):
+class UserEmailOrUsername(BaseModel):
     email: EmailStr | None = None
     username: Annotated[str, MinLen(3), MaxLen(25)] | None = None
-    password: Annotated[str, MinLen(8)]
 
     @model_validator(mode="after")
     def check_email_or_username_provided(self):
         if not self.email and not self.username:
             raise ValueError("Neither email nor username provided")
         return self
+
+
+class UserLogin(UserEmailOrUsername):
+    password: Annotated[str, MinLen(8)]
 
 
 class Code(BaseModel):
