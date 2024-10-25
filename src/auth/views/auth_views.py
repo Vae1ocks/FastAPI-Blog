@@ -50,3 +50,25 @@ async def refresh(
         session=session,
     )
     return TokenInfo(access_token=access_token)
+
+
+@router.post("/password-reset")
+async def password_reset_send_mail(
+    request: Request,
+    user_data: UserEmailOrUsername,
+    session: AsyncSession = Depends(database.session_dependency),
+):
+    """
+    Первый этап сброса пароля: высылает письмо с кодом подтверждения
+    на электронную почту. Нужно передать хотя бы 1 параметр: email или username,
+    оба значения передавать нет необходимости.
+    """
+    user: User = await get_active_user_by_email_or_username(
+        **user_data.model_dump(), session=session
+    )
+    code: int = send_random_code_to_email(email=user.email)
+    request.session["password_reset"] = {
+        "user_id": user.id,
+        "confirmation_code": code,
+    }
+    return {"detail": "confirmation code sent to your email."}
