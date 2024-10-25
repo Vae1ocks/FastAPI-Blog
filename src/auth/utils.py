@@ -187,10 +187,16 @@ def validate_password(
     )
 
 
-async def registrate_not_verified_user(
+def send_random_code_to_email(email: str) -> int:
+    code = random.randint(100000, 999999)
+    send_mail_code.delay(email=email, code=code)
+    return code
+
+
+async def registrate_not_verified_user_and_send_code(
     data: CreateUser,
     session: AsyncSession,
-) -> tuple[int, int]:
+) -> tuple[Mapped[int], int]:
     """
     Служит для создания пользователя с неподтверждённым email,
     отправляет код подтверждения на почту.
@@ -218,8 +224,7 @@ async def registrate_not_verified_user(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="The user already exists and is confirmed.",
         )
-    code = random.randint(100000, 999999)
-    send_mail_code.delay(email=data.email, code=code)
+    code = send_random_code_to_email(email=data.email)
     return user.id, code
 
 
