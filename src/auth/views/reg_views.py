@@ -2,9 +2,8 @@ from fastapi import APIRouter, Depends, status, Request, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.database import database
-from src.auth.schemas import UserRead, CreateUser, Code
-from src.auth.utils import registrate_not_verified_user_and_send_code, confirm_user
-
+from src.auth.schemas import UserRead, CreateUser, CodeScheme
+from src.auth.services import registrate_not_verified_user_and_send_code, confirm_user
 
 router = APIRouter(
     prefix="/reg",
@@ -31,7 +30,7 @@ async def registration_user_data_input(
 @router.post("/confirmation", response_model=UserRead)
 async def registration_confirmation(
     request: Request,
-    code: Code,
+    code: CodeScheme,
     session: AsyncSession = Depends(
         database.session_dependency,
     ),

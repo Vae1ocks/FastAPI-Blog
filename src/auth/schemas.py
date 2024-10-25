@@ -9,8 +9,12 @@ class BaseUser(BaseModel):
     username: Annotated[str, MinLen(3), MaxLen(25)]
 
 
-class CreateUser(BaseUser):
+class PasswordScheme(BaseModel):
     password: Annotated[str, MinLen(8)]
+
+
+class CreateUser(BaseUser, PasswordScheme):
+    pass
 
 
 class UserRead(BaseUser):
@@ -33,8 +37,12 @@ class UserLogin(UserEmailOrUsername):
     password: Annotated[str, MinLen(8)]
 
 
-class Code(BaseModel):
+class CodeScheme(BaseModel):
     code: int
+
+
+class PasswordAndCodeScheme(PasswordScheme, CodeScheme):
+    pass
 
 
 class TokenInfo(BaseModel):
