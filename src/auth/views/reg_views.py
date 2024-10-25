@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.database import database
 from src.auth.schemas import UserRead, CreateUser, Code
-from src.auth.utils import registrate_not_verified_user, confirm_user
+from src.auth.utils import registrate_not_verified_user_and_send_code, confirm_user
 
 
 router = APIRouter(
@@ -20,7 +20,7 @@ async def registration_user_data_input(
         database.session_dependency,
     ),
 ):
-    user_id, code = await registrate_not_verified_user(
+    user_id, code = await registrate_not_verified_user_and_send_code(
         data=data,
         session=session,
     )
