@@ -3,7 +3,11 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.database import database
 from src.auth.schemas import UserRead, CreateUser, CodeScheme
-from src.auth.services import registrate_not_verified_user_and_send_code, confirm_user
+from src.auth.services import (
+    registrate_not_verified_user_and_send_code,
+    confirm_user,
+    compare_expected_session_code_and_provided,
+)
 
 router = APIRouter(
     prefix="/reg",
@@ -35,24 +39,16 @@ async def registration_confirmation(
         database.session_dependency,
     ),
 ):
-    reg_data_exception = HTTPException(
-        status.HTTP_400_BAD_REQUEST,
-        "registration data is not provided",
-    )
-
     reg_data = request.session.get("registration")
     if not reg_data:
-        raise reg_data_exception
-    exp_code = reg_data.get("confirmation_code")
-    user_id = reg_data.get("user_id")
-    if not exp_code or not user_id:
-        raise reg_data_exception
-
-    if exp_code != code.code:
         raise HTTPException(
             status.HTTP_400_BAD_REQUEST,
-            "Code mismatch",
+            "registration data is not provided",
         )
+    compare_expected_session_code_and_provided(
+        data=reg_data,
+        provided_code=code.code,
+    )
 
-    user = await confirm_user(user_id=user_id, session=session)
+    user = await confirm_user(user_id=reg_data["user_id"], session=session)
     return user

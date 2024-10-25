@@ -9,7 +9,13 @@ from starlette import status
 
 from src import User
 from src.auth.schemas import CreateUser
-from src.auth.utils import encode_jwt, decode_jwt, get_active_user, hash_password, send_random_code_to_email
+from src.auth.utils import (
+    encode_jwt,
+    decode_jwt,
+    get_active_user,
+    hash_password,
+    send_random_code_to_email,
+)
 from src.config import settings
 
 
@@ -166,3 +172,23 @@ async def get_active_user_by_email_or_username(
         )
 
     return user
+
+
+def compare_expected_session_code_and_provided(
+    data: dict,
+    provided_code: int,
+) -> None:
+    exp_code = data.get("confirmation_code")
+    user_id = data.get("user_id")
+    if not exp_code or not user_id:
+        raise HTTPException(
+            status.HTTP_400_BAD_REQUEST,
+            "registration data is not provided",
+        )
+
+    if exp_code != provided_code:
+        raise HTTPException(
+            status.HTTP_400_BAD_REQUEST,
+            "Code mismatch",
+        )
+    return
