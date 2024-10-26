@@ -27,11 +27,31 @@ class Article(Base):
         default=UTC_NOW,
         server_default=text("(now() at time zone 'utc')"),
     )
-    updated_at: Mapped[datetime | None] = mapped_column(
-        default=None, onupdate=UTC_NOW
-    )
+    updated_at: Mapped[datetime | None] = mapped_column(default=None, onupdate=UTC_NOW)
 
     author_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     author: Mapped["User"] = relationship(back_populates="articles")
+    comments: Mapped[list["Comment"]] = relationship(back_populates="article")
 
     __table_args__ = (Index("article_title_index", "title"),)
+
+
+class Comment(Base):
+    body: Mapped[str] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(
+        default=UTC_NOW,
+        server_default=text("(now() at time zone 'utc')"),
+    )
+    updated_at: Mapped[datetime | None] = mapped_column(
+        default=None, server_default=None, onupdate=UTC_NOW
+    )
+
+    article_id: Mapped[int] = mapped_column(
+        ForeignKey("articles.id", ondelete="CASCADE"),
+    )
+    article: Mapped["Article"] = relationship(back_populates="comments")
+
+    user_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"),
+    )
+    user: Mapped["User"] = relationship(back_populates="comments")
