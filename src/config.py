@@ -1,15 +1,28 @@
 from pydantic_settings import BaseSettings
-from pydantic import PostgresDsn, RedisDsn
+from pydantic import PostgresDsn, RedisDsn, DirectoryPath, model_validator
 
 from pathlib import Path
 
 BASE_DIR = Path(__file__).parent.parent
 
-
 class BaseSettingsConfig(BaseSettings):
     class Config:
         env_file = f"{BASE_DIR}/.env"
         extra = "ignore"
+
+
+class FileConfig(BaseSettingsConfig):
+    file_path: str = f"{BASE_DIR}/files/"
+    image_path: str = f"{BASE_DIR}/files/images/"
+
+    @model_validator(mode="after")
+    def check_if_path_exists_or_create(self):
+        for path_attr_name in ("file_path", "image_path"):
+            path_ = getattr(self, path_attr_name)
+            path = Path(path_)
+            if path_ and not path.exists():
+                path.mkdir(parents=True, exist_ok=True)
+        return self
 
 
 class DatabaseSettings(BaseSettingsConfig):
@@ -79,6 +92,7 @@ class Settings(BaseSettings):
     session: SessionSettings = SessionSettings()
     redis: RedisSettings = RedisSettings()
     smtp: SMTPSettings = SMTPSettings()
+    files: FileConfig = FileConfig()
 
 
 settings = Settings()
