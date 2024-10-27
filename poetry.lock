@@ -1029,6 +1029,17 @@ files = [
 cli = ["click (>=5.0)"]
 
 [[package]]
+name = "python-multipart"
+version = "0.0.16"
+description = "A streaming multipart parser for Python"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "python_multipart-0.0.16-py3-none-any.whl", hash = "sha256:c2759b7b976ef3937214dfb592446b59dfaa5f04682a076f78b117c94776d87a"},
+    {file = "python_multipart-0.0.16.tar.gz", hash = "sha256:8dee37b88dab9b59922ca173c35acb627cc12ec74019f5cd4578369c6df36554"},
+]
+
+[[package]]
 name = "redis"
 version = "5.1.1"
 description = "Python client for Redis database and key-value store"
@@ -1234,4 +1245,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "05d831ba82ff147902d16d3fc5492a0f8baa247b6c201caaee9108ce4b2c5d9d"
+content-hash = "6794949b0c9068a8f5941cf2b7c2e69d1e5ea0416f27ae6fd83562e36f60b4c5"

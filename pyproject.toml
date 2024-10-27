@@ -20,6 +20,7 @@ email-validator = "^2.2.0"
 bcrypt = "^4.2.0"
 celery = "^5.4.0"
 redis = "^5.1.1"
+python-multipart = "^0.0.16"
 
 
 [build-system]
