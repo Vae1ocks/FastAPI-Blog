@@ -1,5 +1,6 @@
 import time
 from datetime import timedelta
+from typing import BinaryIO
 
 from fastapi import HTTPException
 from sqlalchemy import select, Result
@@ -97,6 +98,7 @@ async def get_current_active_user_for_refresh(
 
 async def registrate_not_verified_user_and_send_code(
     data: CreateUser,
+    file: BinaryIO,
     session: AsyncSession,
 ) -> tuple[Mapped[int], int]:
     """
@@ -119,6 +121,8 @@ async def registrate_not_verified_user_and_send_code(
             is_confirmed=False,
             is_superuser=False,
         )
+        if file is not None:
+            await user.save_picture(file=file)
         session.add(user)
         await session.commit()
         await session.refresh(user)

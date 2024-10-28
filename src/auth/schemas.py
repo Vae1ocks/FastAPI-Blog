@@ -1,12 +1,12 @@
 from typing import Annotated
 
 from annotated_types import MinLen, MaxLen
-from pydantic import BaseModel, EmailStr, ConfigDict, model_validator
+from pydantic import BaseModel, EmailStr, model_validator
 
 
 class BaseUser(BaseModel):
-    email: EmailStr
     username: Annotated[str, MinLen(3), MaxLen(25)]
+    email: EmailStr
 
 
 class PasswordScheme(BaseModel):

@@ -1,4 +1,6 @@
-from fastapi import Depends, HTTPException, status
+from PIL import Image, UnidentifiedImageError
+
+from fastapi import Depends, HTTPException, status, UploadFile
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -90,3 +92,15 @@ def get_current_active_user(user: User = Depends(get_current_user)):
             detail="User is inactive.",
         )
     return user
+
+
+async def get_validated_image_file(file: UploadFile):
+    try:
+        image = Image.open(file.file)
+        image.verify()
+    except UnidentifiedImageError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"File not image"
+        )
+    return file
