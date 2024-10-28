@@ -51,7 +51,7 @@ class Comment(Base):
     )
     article: Mapped["Article"] = relationship(back_populates="comments")
 
-    user_id: Mapped[int] = mapped_column(
+    author_id: Mapped[int] = mapped_column(
         ForeignKey("users.id", ondelete="CASCADE"),
     )
-    user: Mapped["User"] = relationship(back_populates="comments")
+    author: Mapped["User"] = relationship(back_populates="comments")
