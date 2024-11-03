@@ -1,12 +1,16 @@
 import aiofiles
 from pathlib import Path
 from datetime import datetime, UTC
+from typing import TYPE_CHECKING
 
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column, validates, relationship
 
 from src.models import Base
 from src.config import settings
+
+if TYPE_CHECKING:
+    from src.articles.models import Article, Comment
 
 
 class User(Base):
