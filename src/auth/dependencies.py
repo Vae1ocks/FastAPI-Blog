@@ -11,7 +11,7 @@ from starlette.status import HTTP_400_BAD_REQUEST
 
 from src.database import database
 from . import utils
-from .schemas import UserLogin, UserRead
+from .schemas import UserLogin
 from .models import User
 from src.config import settings
 
@@ -63,7 +63,7 @@ async def get_current_user(
         database.session_dependency,
     ),
 ) -> User:
-    token = credentials.token
+    token = credentials.credentials
     try:
         payload = utils.decode_jwt(token=token)
     except InvalidTokenError:
