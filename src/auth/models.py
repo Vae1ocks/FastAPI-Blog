@@ -13,8 +13,6 @@ from src.config import settings
 if TYPE_CHECKING:
     from src.articles.models import Article, Comment
 
-UTC_NOW = partial(datetime.now, UTC)
-
 
 class User(Base):
     email: Mapped[str] = mapped_column(unique=True)
@@ -22,7 +20,6 @@ class User(Base):
     password: Mapped[str]
     image_path: Mapped[str] = mapped_column(nullable=True)
     created_at: Mapped[datetime] = mapped_column(
-        default=UTC_NOW,
         server_default=text("(now() at time zone 'utc')"),
     )
 

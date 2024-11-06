@@ -24,7 +24,6 @@ class Article(Base):
     body: Mapped[str] = mapped_column(Text)
     status: Mapped[ArticleStatus] = mapped_column(default=ArticleStatus.draft)
     created_at: Mapped[datetime] = mapped_column(
-        default=UTC_NOW,
         server_default=text("(now() at time zone 'utc')"),
     )
     updated_at: Mapped[datetime | None] = mapped_column(default=None, onupdate=UTC_NOW)
@@ -39,7 +38,6 @@ class Article(Base):
 class Comment(Base):
     body: Mapped[str] = mapped_column(Text)
     created_at: Mapped[datetime] = mapped_column(
-        default=UTC_NOW,
         server_default=text("(now() at time zone 'utc')"),
     )
     updated_at: Mapped[datetime | None] = mapped_column(
