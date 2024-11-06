@@ -2,8 +2,9 @@ import aiofiles
 from pathlib import Path
 from datetime import datetime, UTC
 from typing import TYPE_CHECKING
+from functools import partial
 
-from sqlalchemy import String
+from sqlalchemy import String, text
 from sqlalchemy.orm import Mapped, mapped_column, validates, relationship
 
 from src.models import Base
@@ -12,12 +13,18 @@ from src.config import settings
 if TYPE_CHECKING:
     from src.articles.models import Article, Comment
 
+UTC_NOW = partial(datetime.now, UTC)
+
 
 class User(Base):
     email: Mapped[str] = mapped_column(unique=True)
     username: Mapped[str] = mapped_column(String(25), unique=True)
     password: Mapped[str]
     image_path: Mapped[str] = mapped_column(nullable=True)
+    created_at: Mapped[datetime] = mapped_column(
+        default=UTC_NOW,
+        server_default=text("(now() at time zone 'utc')"),
+    )
 
     articles: Mapped[list["Article"]] = relationship(back_populates="author")
     comments: Mapped[list["Comment"]] = relationship(back_populates="author")

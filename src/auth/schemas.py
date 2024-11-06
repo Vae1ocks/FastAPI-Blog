@@ -1,6 +1,7 @@
 from typing import Annotated
-
+from datetime import datetime
 from annotated_types import MinLen, MaxLen
+
 from pydantic import BaseModel, EmailStr, model_validator
 
 
@@ -18,6 +19,8 @@ class CreateUser(BaseUser, PasswordScheme):
 
 
 class UserRead(BaseUser):
+    created_at: datetime
+
     class Config:
         from_attributes = True
 
