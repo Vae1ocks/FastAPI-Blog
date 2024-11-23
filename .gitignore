@@ -9,7 +9,8 @@ __pycache__/
 # C extensions
 *.so
 
-old/
+_OLD/
+
 
 # Distribution / packaging
 .Python
