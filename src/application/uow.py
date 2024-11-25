@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class AbstractUnitOfWork(ABC):
+class UnitOfWork(ABC):
     @abstractmethod
     async def __aenter__(self):
         raise NotImplementedError()
