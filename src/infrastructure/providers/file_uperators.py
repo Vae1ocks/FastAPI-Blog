@@ -10,12 +10,9 @@ from infrastructure.persistence.alembic.env import config
 
 class ImageCheckerImpl(ImageChecker):
     def __call__(self, file: BytesIO):
-        try:
-            image = Image.open(file)
-            image.verify()
-            return True
-        except UnidentifiedImageError:
-            return False
+        image = Image.open(file)
+        image.verify()
+        return True
 
 
 class FileSystemImageLoader(ImageLoader):

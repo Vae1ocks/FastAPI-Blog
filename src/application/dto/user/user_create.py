@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from io import BytesIO
 
 
 @dataclass(frozen=True, slots=True)
@@ -6,4 +7,4 @@ class UserCreateDTO:
     username: str
     email: str
     password: str
-    image_path: str | None = None
+    image: BytesIO | None = None
