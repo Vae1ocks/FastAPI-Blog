@@ -43,8 +43,8 @@ class UserRegistrationService:
         if data.expected_code != data.provided_code:
             raise ValueError("Code mismatch")
 
-        user = await uow.user_repository.get_by_id(user_id=data.user_id)
-        user.is_confirmed = True
+        user: User = await uow.user_repository.get_by_id(user_id=data.user_id)
+        user.confirm_registration()
         uow.user_repository.add(user)
         return user
 
