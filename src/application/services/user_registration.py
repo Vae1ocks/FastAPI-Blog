@@ -7,19 +7,17 @@ from application.dto.user.user_create import UserCreateDTO
 from application.providers.code_generator import CodeIntGenerator
 from application.providers.file_operators import ImageChecker, ImageLoader
 from application.providers.password_hasher import PasswordHasher
-from domain.repositories.user_repository import UserRepository
-from domain.entities.user.models import User, UserId
+from domain.entities.user.models import User
 
 
 @dataclass
 class UserRegistrationService:
-    uow: UnitOfWork
     code_generator: CodeIntGenerator
     password_hasher: PasswordHasher
     image_checker: ImageChecker
     image_loader: ImageLoader
 
-    async def register_unconfirmed(self, data: UserCreateDTO) -> User:
+    async def register_unconfirmed(self, uow: UnitOfWork, data: UserCreateDTO) -> User:
         user = self._validate_unique_email_and_username(
             username=data.username,
             email=data.email,
@@ -38,20 +36,22 @@ class UserRegistrationService:
             image_path=image_path,
         )
 
-        self.uow.user_repository.add(user)
+        uow.user_repository.add(user)
         return user
 
-    async def confirm_user(self, data: ConfirmationCodesDTO):
+    async def confirm_user(self, uow: UnitOfWork, data: ConfirmationCodesDTO):  # noqa
         if data.expected_code != data.provided_code:
             raise ValueError("Code mismatch")
 
-        user = await self.uow.user_repository.get_by_id(user_id=data.user_id)
+        user = await uow.user_repository.get_by_id(user_id=data.user_id)
         user.is_confirmed = True
-        self.uow.user_repository.add(user)
+        uow.user_repository.add(user)
         return user
 
-    async def _validate_unique_email_and_username(self, username: str, email: str):
-        existing_users = await self.uow.user_repository.get_by_email_or_username(
+    async def _validate_unique_email_and_username(  # noqa
+        self, uow: UnitOfWork, username: str, email: str
+    ):
+        existing_users = await uow.user_repository.get_by_email_or_username(
             username=username, email=email
         )
         if not existing_users:
