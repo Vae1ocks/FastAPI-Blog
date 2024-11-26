@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 
+from application.dto.other.int_code import ConfirmationCodesDTO
 from application.dto.user.user_read import UserReadDTO
 from application.mappers.user.user_to_dto import UserToDTOMapper
-from domain.entities.user.models import User
 from application.dto.user.user_create import UserCreateDTO
 from application.providers.code_generator import RandomCodeGenerator
 from application.services.user_registration import UserRegistrationService
@@ -32,3 +32,9 @@ class RegistrationUseCase:
             )
             user_dto = self.user_to_dto_mapper.to_read_dto(user)
             return user_dto, code
+
+    async def confirm_registration(self, dto: ConfirmationCodesDTO) -> UserReadDTO:
+        async with self.uow as uow:
+            user = await self.registration_service.confirm_user(uow=uow, data=dto)
+            user_dto = self.user_to_dto_mapper.to_read_dto(user)
+            return user_dto
