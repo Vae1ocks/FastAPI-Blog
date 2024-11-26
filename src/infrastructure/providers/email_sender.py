@@ -10,6 +10,7 @@ class EmailSender(MailSender):
     host_password: str
     port: int
 
+
     def send(self, emails: list[str], subject: str, message: str) -> str:
         task = send_email.delay(
             host=self.host,

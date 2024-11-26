@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class CodeIntGenerator(ABC):
+class RandomCodeGenerator(ABC):
     @abstractmethod
     def __call__(self):
         ...

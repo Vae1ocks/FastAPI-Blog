@@ -4,7 +4,6 @@ from io import BytesIO
 from application.dto.other.int_code import ConfirmationCodesDTO
 from application.uow import UnitOfWork
 from application.dto.user.user_create import UserCreateDTO
-from application.providers.code_generator import CodeIntGenerator
 from application.providers.file_operators import ImageChecker, ImageLoader
 from application.providers.password_hasher import PasswordHasher
 from domain.entities.user.models import User
@@ -12,7 +11,6 @@ from domain.entities.user.models import User
 
 @dataclass
 class UserRegistrationService:
-    code_generator: CodeIntGenerator
     password_hasher: PasswordHasher
     image_checker: ImageChecker
     image_loader: ImageLoader

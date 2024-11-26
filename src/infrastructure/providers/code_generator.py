@@ -1,9 +1,9 @@
 from random import randint
 
-from application.providers.code_generator import CodeIntGenerator
+from application.providers.code_generator import RandomCodeGenerator
 
 
-class CodeIntGeneratorImpl(CodeIntGenerator):
+class RandomIntegerCodeGenerator(RandomCodeGenerator):
     def __init__(self, min_val: int, max_val: int):
         self.min_val = min_val
         self.max_val = max_val
