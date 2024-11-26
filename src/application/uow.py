@@ -11,11 +11,11 @@ class UnitOfWork(ABC):
 
     @abstractmethod
     async def commit(self):
-        pass
+        raise NotImplementedError()
 
     @abstractmethod
     async def rollback(self):
-        pass
+        raise NotImplementedError()
 
     @property
     @abstractmethod
