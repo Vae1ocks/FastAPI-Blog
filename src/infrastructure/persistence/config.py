@@ -1,18 +1,10 @@
 from pydantic import PostgresDsn, RedisDsn, model_validator
 from pydantic_settings import BaseSettings
 
-from pathlib import Path
-
-BASE_DIR = Path(__file__).parent.parent.parent.parent
+from infrastructure.configs import BaseSettingsConfig
 
 
-class BaseSettingsConfig(BaseSettings):
-    class Config:
-        env_file = f"{BASE_DIR}/.env"
-        extra = "ignore"
-
-
-class DatabaseSettings(BaseSettingsConfig):
+class DatabaseConfig(BaseSettingsConfig):
     @property
     def url(self) -> PostgresDsn:
         return (
@@ -32,53 +24,8 @@ class DatabaseSettings(BaseSettingsConfig):
         env_prefix = "DB_"
 
 
-class JWTSettings(BaseSettingsConfig):
-    secret: str
-    algorithm: str = "HS256"
-    access_token_lifespan_minutes: int = 5
-    access_token_type: str = "str"
-    refresh_token_lifespan_days: int = 15
-    refresh_token_type: str = "refresh"
-
-    class Config:
-        env_prefix = "JWT_"
+class DbConfig(BaseSettings):
+    db: DatabaseConfig = DatabaseConfig()
 
 
-class SessionSettings(BaseSettingsConfig):
-    secret: str
-
-    class Config:
-        env_prefix = "SESSION_"
-
-
-class RedisSettings(BaseSettingsConfig):
-    port: str
-    host: str
-
-    @property
-    def url(self) -> RedisDsn:
-        return f"redis://{self.host}:{self.port}"
-
-    class Config:
-        env_prefix = "REDIS_"
-
-
-class SMTPSettings(BaseSettingsConfig):
-    host: str
-    host_user: str
-    host_password: str
-    port: str
-
-    class Config:
-        env_prefix = "SMTP_"
-
-
-class Settings(BaseSettings):
-    db: DatabaseSettings = DatabaseSettings()
-    jwt: JWTSettings = JWTSettings()
-    session: SessionSettings = SessionSettings()
-    redis: RedisSettings = RedisSettings()
-    smtp: SMTPSettings = SMTPSettings()
-
-
-settings = Settings()
+db_config: DbConfig = DbConfig()

@@ -1,9 +1,9 @@
 from pydantic import RedisDsn
 
-from infrastructure.config import BaseSettingsConfig
+from infrastructure.configs import BaseSettingsConfig
 
 
-class RedisSettings(BaseSettingsConfig):
+class RedisConfig(BaseSettingsConfig):
     port: str
     host: str
 
@@ -15,7 +15,7 @@ class RedisSettings(BaseSettingsConfig):
         env_prefix = "REDIS_"
 
 
-class SMTPSettings(BaseSettingsConfig):
+class SMTPConfig(BaseSettingsConfig):
     host: str
     host_user: str
     host_password: str
@@ -26,8 +26,8 @@ class SMTPSettings(BaseSettingsConfig):
 
 
 class CeleryConfig(BaseSettingsConfig):
-    redis: RedisSettings = RedisSettings()
-    smtp: SMTPSettings = SMTPSettings()
+    redis: RedisConfig = RedisConfig()
+    smtp: SMTPConfig = SMTPConfig()
 
 
-celery_settings = CeleryConfig()
+celery_config = CeleryConfig()

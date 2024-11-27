@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import (
     async_scoped_session,
 )
 
-from .config import settings
+from .config import db_config
 
 
 class Database:
@@ -36,6 +36,6 @@ class Database:
 
 
 database = Database(
-    url=settings.db.url,
-    echo=settings.db.echo,
+    url=db_config.db.url,
+    echo=db_config.db.echo,
 )

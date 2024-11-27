@@ -2,12 +2,7 @@ from pydantic_settings import BaseSettings
 from pydantic import model_validator
 from pathlib import Path
 
-BASE_DIR = Path(__file__).parent.parent.parent.parent
-
-class BaseSettingsConfig(BaseSettings):
-    class Config:
-        env_file = f"{BASE_DIR}/.env"
-        extra = "ignore"
+from infrastructure.configs import BaseSettingsConfig, BASE_DIR
 
 
 class FileConfig(BaseSettingsConfig):
@@ -30,8 +25,8 @@ class FileConfig(BaseSettingsConfig):
         return self
 
 
-class Settings(BaseSettings):
+class FileSettings(BaseSettings):
     files: FileConfig = FileConfig()
 
 
-settings = Settings()
+file_config = FileSettings()
