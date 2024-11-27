@@ -2,7 +2,7 @@ from pydantic_settings import BaseSettings
 from pydantic import model_validator
 from pathlib import Path
 
-from infrastructure.configs import BaseSettingsConfig, BASE_DIR
+from setup.configs import BaseSettingsConfig, BASE_DIR
 
 
 class FileConfig(BaseSettingsConfig):

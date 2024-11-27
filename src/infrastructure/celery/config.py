@@ -1,6 +1,6 @@
 from pydantic import RedisDsn
 
-from infrastructure.configs import BaseSettingsConfig
+from setup.configs import BaseSettingsConfig
 
 
 class RedisConfig(BaseSettingsConfig):

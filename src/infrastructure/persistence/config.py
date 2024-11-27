@@ -1,7 +1,7 @@
-from pydantic import PostgresDsn, RedisDsn, model_validator
+from pydantic import PostgresDsn
 from pydantic_settings import BaseSettings
 
-from infrastructure.configs import BaseSettingsConfig
+from setup.configs import BaseSettingsConfig
 
 
 class DatabaseConfig(BaseSettingsConfig):
