@@ -1,5 +1,4 @@
 from pydantic import PostgresDsn
-from pydantic_settings import BaseSettings
 
 from setup.configs import BaseSettingsConfig
 
@@ -24,14 +23,23 @@ class DatabaseConfig(BaseSettingsConfig):
         env_prefix = "DB_"
 
 
-class SqlaConfig(BaseSettings):
+class SqlaEngineConfig(BaseSettingsConfig):
     echo: bool
     echo_pool: bool
     pool_size: int
     max_overflow: int
 
     class Config:
-        env_prefix = "SQLA_"
+        env_prefix = "SQLA_ENG_"
+
+
+class SqlaSessionConfig(BaseSettingsConfig):
+    autoflush: bool
+    autocommit: bool
+    expire_on_commit: bool
+
+    class Config:
+        env_prefix = "SQLA_SESS_"
 
 
 db_config: DatabaseConfig = DatabaseConfig()
