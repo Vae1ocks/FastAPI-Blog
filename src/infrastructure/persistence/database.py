@@ -1,41 +1,36 @@
 from asyncio import current_task
+from typing import AsyncGenerator, AsyncIterable
 
 from sqlalchemy.ext.asyncio import (
     create_async_engine,
     async_sessionmaker,
-    async_scoped_session,
+    async_scoped_session, AsyncEngine, AsyncSession,
 )
 
-from .config import db_config
+from .config import SqlaEngineConfig, SqlaSessionConfig
 
 
-class Database:
-    def __init__(self, url, echo: bool = False):
-        self.engine = create_async_engine(
-            url=url,
-            echo=echo,
-        )
-        self.session_factory = async_sessionmaker(
-            bind=self.engine,
-            autoflush=False,
-            autocommit=False,
-            expire_on_commit=False,
-        )
+async def get_engine(pg_dsn: str, settings: SqlaEngineConfig) -> AsyncGenerator[AsyncEngine, None]:
+    engine = create_async_engine(
+        pg_dsn,
+        **settings.model_dump()
+    )
+    yield engine
+    await engine.dispose()
 
-    def get_scoped_session(self):
-        session = async_scoped_session(
-            session_factory=self.session_factory,
-            scopefunc=current_task,
-        )
-        return session
 
-    async def session_dependency(self):
-        session = self.get_scoped_session()
+async def get_async_sessionmaker(
+    engine: AsyncEngine,
+    settings: SqlaSessionConfig
+) -> async_sessionmaker[AsyncSession]:
+    session_factory = async_sessionmaker(
+        engine, **settings.model_dump()
+    )
+    return session_factory
+
+
+async def get_async_session(
+    session_factory: async_sessionmaker[AsyncSession]
+) -> AsyncIterable[AsyncSession]:
+    async with session_factory() as session:
         yield session
-        await session.close()
-
-
-database = Database(
-    url=db_config.db.url,
-    echo=db_config.db.echo,
-)
