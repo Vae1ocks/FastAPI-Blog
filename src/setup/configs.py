@@ -3,7 +3,7 @@ from pydantic import model_validator
 from pathlib import Path
 
 from infrastructure.celery.config import RedisConfig, SMTPConfig, CeleryConfig
-from infrastructure.persistence.config import DatabaseConfig
+from infrastructure.persistence.config import DatabaseConfig, SqlaConfig
 from infrastructure.providers.config import FileConfig
 
 BASE_DIR = Path(__file__).parent.parent.parent.parent
@@ -17,6 +17,7 @@ class BaseSettingsConfig(BaseSettings):
 
 class AllConfigs(BaseSettingsConfig):
     db: DatabaseConfig = DatabaseConfig()
+    sqla: SqlaConfig = SqlaConfig()
     redis: RedisConfig = RedisConfig()
     smtp: SMTPConfig = SMTPConfig()
     file: FileConfig = FileConfig()

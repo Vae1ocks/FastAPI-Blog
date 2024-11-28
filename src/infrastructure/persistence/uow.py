@@ -4,7 +4,6 @@ from application.uow import UnitOfWork
 from infrastructure.repositories.sqlalchemy.user_repository import UserRepositoryImpl
 from infrastructure.repositories.sqlalchemy.article_repository import ArticleRepositoryImpl
 from infrastructure.repositories.sqlalchemy.comment_repository import CommentRepositoryImpl
-from .database import database
 
 
 @dataclass

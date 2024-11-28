@@ -24,8 +24,14 @@ class DatabaseConfig(BaseSettingsConfig):
         env_prefix = "DB_"
 
 
-class DbConfig(BaseSettings):
-    db: DatabaseConfig = DatabaseConfig()
+class SqlaConfig(BaseSettings):
+    echo: bool
+    echo_pool: bool
+    pool_size: int
+    max_overflow: int
+
+    class Config:
+        env_prefix = "SQLA_"
 
 
-db_config: DbConfig = DbConfig()
+db_config: DatabaseConfig = DatabaseConfig()

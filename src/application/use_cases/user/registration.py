@@ -13,7 +13,6 @@ from infrastructure.providers.email_sender import EmailSender
 @dataclass
 class RegistrationUseCase:
     registration_service: UserRegistrationService
-    user_to_dto_mapper: UserToDTOMapper
     code_generator: RandomCodeGenerator
     email_sender: EmailSender
     uow: UnitOfWork
@@ -30,18 +29,17 @@ class RegistrationUseCase:
                 subject="Confirmation code",
                 message=message,
             )
-            user_dto = self.user_to_dto_mapper.to_read_dto(user)
+            user_dto = UserToDTOMapper.to_read_dto(user)
             return user_dto, code
 
 
 @dataclass
 class RegistrationConfirmationUseCase:
     registration_service: UserRegistrationService
-    user_to_dto_mapper: UserToDTOMapper
     uow: UnitOfWork
 
     async def execute(self, dto: ConfirmationCodesDTO) -> UserReadDTO:
         async with self.uow as uow:
             user = await self.registration_service.confirm_user(uow=uow, data=dto)
-            user_dto = self.user_to_dto_mapper.to_read_dto(user)
+            user_dto = UserToDTOMapper.to_read_dto(user)
             return user_dto
