@@ -20,3 +20,6 @@ class DbContainer(DeclarativeContainer):
     uow = Factory(
         SQLAUnitOfWork, session_maker=session_maker
     )
+
+
+db_container = DbContainer()

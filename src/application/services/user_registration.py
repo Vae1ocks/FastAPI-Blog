@@ -74,6 +74,6 @@ class UserRegistrationService:
         raise ValueError("User with such username and email already exists")
 
     async def _process_user_image(self, file: BytesIO):
-        self.image_checker(file)
+        self.image_checker.check(file)
         image_path = await self.image_loader(image=file)
         return image_path

@@ -3,8 +3,9 @@ from abc import ABC, abstractmethod
 from io import BytesIO
 
 class ImageChecker(ABC):
+    @staticmethod
     @abstractmethod
-    def __call__(self, file: BytesIO):
+    def check(file: BytesIO):
         ...
 
 

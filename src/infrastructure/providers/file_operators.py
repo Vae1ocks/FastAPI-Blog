@@ -1,24 +1,24 @@
 from datetime import datetime, UTC
 from io import BytesIO
-from PIL import Image, UnidentifiedImageError
+from PIL import Image
 from pathlib import Path
 import aiofiles
 
 from application.providers.file_operators import ImageChecker, ImageLoader
-from infrastructure.persistence.alembic.env import config
 
 
 class ImageCheckerImpl(ImageChecker):
-    def __call__(self, file: BytesIO):
+    @staticmethod
+    def check(file: BytesIO):
         image = Image.open(file)
         image.verify()
         return True
 
 
 class FileSystemImageLoader(ImageLoader):
-    def __init__(self, settings):
-        self.directory = Path(settings.users_profile_images_directory)
-        self.file_name_pattern = settings.file_save_time_pattern
+    def __init__(self, directory: str, file_name_patter: str):
+        self.directory = Path(directory)
+        self.file_name_pattern = file_name_patter
 
     async def __call__(self, image: BytesIO) -> str:
         path = Path(self.directory)
