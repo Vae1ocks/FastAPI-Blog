@@ -23,3 +23,6 @@ class AllConfigs(BaseSettingsConfig):
     smtp: SMTPConfig = SMTPConfig()
     file: FileConfig = FileConfig()
     celery: CeleryConfig = CeleryConfig()
+
+
+configs = AllConfigs()
