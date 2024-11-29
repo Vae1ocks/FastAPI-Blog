@@ -25,8 +25,16 @@ class FileConfig(BaseSettingsConfig):
         return self
 
 
-class FileSettings(BaseSettings):
-    files: FileConfig = FileConfig()
+class PepperConfig(BaseSettingsConfig):
+    pepper: str
+
+    class Config:
+        env_prefix = "PASSWORD_"
 
 
-file_config = FileSettings()
+class CodeGeneratorConfig(BaseSettingsConfig):
+    min_val: int
+    max_val: int
+
+    class Config:
+        env_prefix = "CODE_GENERATOR_"

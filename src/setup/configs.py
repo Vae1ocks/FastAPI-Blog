@@ -4,7 +4,7 @@ from pathlib import Path
 
 from infrastructure.celery.config import RedisConfig, SMTPConfig, CeleryConfig
 from infrastructure.persistence.config import DatabaseConfig, SqlaEngineConfig, SqlaSessionConfig
-from infrastructure.providers.config import FileConfig
+from infrastructure.providers.config import FileConfig, PepperConfig, CodeGeneratorConfig
 
 BASE_DIR = Path(__file__).parent.parent.parent.parent
 
@@ -22,6 +22,8 @@ class AllConfigs(BaseSettingsConfig):
     redis: RedisConfig = RedisConfig()
     smtp: SMTPConfig = SMTPConfig()
     file: FileConfig = FileConfig()
+    pepper: PepperConfig = PepperConfig()
+    code_generator: CodeGeneratorConfig = CodeGeneratorConfig()
     celery: CeleryConfig = CeleryConfig()
 
 
