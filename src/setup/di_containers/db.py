@@ -17,6 +17,6 @@ class DbContainer(DeclarativeContainer):
         engine=engine,
         settings=configs.sqla_sess,
     )
-    uow = Factory(
+    uow: SQLAUnitOfWork = Factory(
         SQLAUnitOfWork, session_maker=session_maker
     )

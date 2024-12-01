@@ -7,13 +7,13 @@ from setup.di_containers.infrastructure import InfrastructureContainer
 
 
 class MainContainer(DeclarativeContainer):
-    infrastructure_container = Container(
+    infrastructure_container: InfrastructureContainer = Container(
         InfrastructureContainer,
     )
-    db_container = Container(
+    db_container: DbContainer = Container(
         DbContainer,
     )
-    application_container = Container(
+    application_container: ApplicationContainer = Container(
         ApplicationContainer,
         infrastructure_container=infrastructure_container,
         db_container=db_container,

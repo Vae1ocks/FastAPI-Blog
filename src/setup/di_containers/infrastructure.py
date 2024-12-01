@@ -11,19 +11,19 @@ from setup.configs import configs
 
 
 class InfrastructureContainer(DeclarativeContainer):
-    password_hasher = Factory(
+    password_hasher: BcryptPasswordHasher = Factory(
         BcryptPasswordHasher,
         pepper=configs.pepper.pepper,
     )
 
-    image_checker = Singleton(ImageCheckerImpl)
-    image_loader = Factory(
+    image_checker: ImageCheckerImpl = Singleton(ImageCheckerImpl)
+    image_loader: FileSystemImageLoader = Factory(
         FileSystemImageLoader,
         directory=configs.file.users_profile_images_directory,
         file_name_patter=configs.file.file_save_time_pattern,
     )
 
-    code_generator = Singleton(
+    code_generator: RandomIntegerCodeGenerator = Singleton(
         RandomIntegerCodeGenerator,
         min_val=configs.code_generator.min_val,
         max_val=configs.code_generator.max_val,

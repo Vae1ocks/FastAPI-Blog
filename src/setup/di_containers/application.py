@@ -12,14 +12,14 @@ class ApplicationContainer(DeclarativeContainer):
     infrastructure_container = DependenciesContainer()
     db_container = DependenciesContainer()
 
-    user_registration_service = Factory(
+    user_registration_service: UserRegistrationService = Factory(
         UserRegistrationService,
         password_hasher=infrastructure_container.password_hasher,
         image_checker=infrastructure_container.image_checker,
         image_loader=infrastructure_container.image_loader,
     )
 
-    user_registration_usecase = Factory(
+    user_registration_usecase: RegistrationUseCase = Factory(
         RegistrationUseCase,
         registration_service=user_registration_service,
         code_generator=infrastructure_container.code_generator,
@@ -27,7 +27,7 @@ class ApplicationContainer(DeclarativeContainer):
         uow=db_container.uow,
     )
 
-    user_confirmation_usecase = Factory(
+    user_confirmation_usecase: RegistrationConfirmationUseCase = Factory(
         RegistrationConfirmationUseCase,
         registration_service=user_registration_service,
         uow=db_container.uow,
