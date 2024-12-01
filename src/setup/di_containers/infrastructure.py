@@ -28,6 +28,3 @@ class InfrastructureContainer(DeclarativeContainer):
         min_val=configs.code_generator.min_val,
         max_val=configs.code_generator.max_val,
     )
-
-
-infrastructure_container = InfrastructureContainer()
