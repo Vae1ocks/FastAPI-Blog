@@ -15,6 +15,22 @@ class BaseSettingsConfig(BaseSettings):
         extra = "ignore"
 
 
+class SessionConfig(BaseSettingsConfig):
+    secret: str
+
+    class Config:
+        env_prefix = "SESSION_"
+
+
+class UvicornConfig(BaseSettingsConfig):
+    host: str = "localhost"
+    port: int = 8000
+    reload: bool = True
+
+    class Config:
+        env_prefix = "UVICORN_"
+
+
 class AllConfigs(BaseSettingsConfig):
     db: DatabaseConfig = DatabaseConfig()
     sqla_eng: SqlaEngineConfig = SqlaEngineConfig()
@@ -25,6 +41,8 @@ class AllConfigs(BaseSettingsConfig):
     pepper: PepperConfig = PepperConfig()
     code_generator: CodeGeneratorConfig = CodeGeneratorConfig()
     celery: CeleryConfig = CeleryConfig()
+    session: SessionConfig = SessionConfig()
+    uvicorn: UvicornConfig = UvicornConfig()
 
 
 configs = AllConfigs()
