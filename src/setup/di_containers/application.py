@@ -10,7 +10,7 @@ from .infrastructure import infrastructure_container
 from .db import db_container
 
 
-class ApplicationProvider(DeclarativeContainer):
+class ApplicationContainer(DeclarativeContainer):
     user_registration_service = Factory(
         UserRegistrationService,
         password_hasher=infrastructure_container.password_hasher,
@@ -31,3 +31,6 @@ class ApplicationProvider(DeclarativeContainer):
         registration_service=user_registration_service,
         uow=db_container.uow,
     )
+
+
+application_container = ApplicationContainer()
