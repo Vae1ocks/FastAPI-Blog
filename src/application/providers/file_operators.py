@@ -1,15 +1,15 @@
 from abc import ABC, abstractmethod
+from typing import BinaryIO
 
-from io import BytesIO
 
 class ImageChecker(ABC):
     @staticmethod
     @abstractmethod
-    def check(file: BytesIO):
+    def check(file: BinaryIO):
         ...
 
 
 class ImageLoader(ABC):
     @abstractmethod
-    def __call__(self, image: BytesIO):
+    def __call__(self, image: BinaryIO):
         ...

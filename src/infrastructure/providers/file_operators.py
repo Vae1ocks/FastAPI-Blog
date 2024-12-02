@@ -1,5 +1,6 @@
 from datetime import datetime, UTC
-from io import BytesIO
+from typing import BinaryIO
+
 from PIL import Image
 from pathlib import Path
 import aiofiles
@@ -9,7 +10,7 @@ from application.providers.file_operators import ImageChecker, ImageLoader
 
 class ImageCheckerImpl(ImageChecker):
     @staticmethod
-    def check(file: BytesIO):
+    def check(file: BinaryIO):
         image = Image.open(file)
         image.verify()
         return True
@@ -20,7 +21,7 @@ class FileSystemImageLoader(ImageLoader):
         self.directory = Path(directory)
         self.file_name_pattern = file_name_patter
 
-    async def __call__(self, image: BytesIO) -> str:
+    async def __call__(self, image: BinaryIO) -> str:
         path = Path(self.directory)
         file_extension = Path(image.filename).suffix
         timestamp = datetime.now(UTC).strftime(

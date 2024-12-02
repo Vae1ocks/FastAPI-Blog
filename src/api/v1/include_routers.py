@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from endpoints.user.registration import router as user_reg_router
+from .endpoints.user.registration import router as user_reg_router
 
 
 def include_routers(app: FastAPI) -> None:
