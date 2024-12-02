@@ -1,24 +1,18 @@
-from pydantic_settings import BaseSettings
-from pydantic import model_validator
 from pathlib import Path
 
 from infrastructure.celery.config import RedisConfig, SMTPConfig, CeleryConfig
 from infrastructure.persistence.config import DatabaseConfig, SqlaEngineConfig, SqlaSessionConfig
 from infrastructure.providers.config import FileConfig, PepperConfig, CodeGeneratorConfig
+from setup.base_config import BaseSettingsConfig
 
-BASE_DIR = Path(__file__).parent.parent.parent.parent
-
-
-class BaseSettingsConfig(BaseSettings):
-    class Config:
-        env_file = f"{BASE_DIR}/.env"
-        extra = "ignore"
+BASE_DIR = Path(__file__).parent.parent.parent
 
 
 class SessionConfig(BaseSettingsConfig):
     secret: str
 
     class Config:
+        env_file = f"{BASE_DIR}/.env"
         env_prefix = "SESSION_"
 
 
@@ -28,6 +22,7 @@ class UvicornConfig(BaseSettingsConfig):
     reload: bool = True
 
     class Config:
+        env_file = f"{BASE_DIR}/.env"
         env_prefix = "UVICORN_"
 
 

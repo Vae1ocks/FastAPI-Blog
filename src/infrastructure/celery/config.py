@@ -1,6 +1,10 @@
+from pathlib import Path
+
 from pydantic import RedisDsn
 
-from setup.configs import BaseSettingsConfig
+from setup.base_config import BaseSettingsConfig
+
+BASE_DIR = Path(__file__).parent.parent.parent.parent
 
 
 class RedisConfig(BaseSettingsConfig):
@@ -12,6 +16,7 @@ class RedisConfig(BaseSettingsConfig):
         return f"redis://{self.host}:{self.port}"
 
     class Config:
+        env_file = f"{BASE_DIR}/.env"
         env_prefix = "REDIS_"
 
 
@@ -22,6 +27,7 @@ class SMTPConfig(BaseSettingsConfig):
     port: int
 
     class Config:
+        env_file = f"{BASE_DIR}/.env"
         env_prefix = "SMTP_"
 
 

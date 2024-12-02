@@ -2,7 +2,9 @@ from pydantic_settings import BaseSettings
 from pydantic import model_validator
 from pathlib import Path
 
-from setup.configs import BaseSettingsConfig, BASE_DIR
+from setup.base_config import BaseSettingsConfig
+
+BASE_DIR = Path(__file__).parent.parent.parent.parent
 
 
 class FileConfig(BaseSettingsConfig):
@@ -30,6 +32,7 @@ class PepperConfig(BaseSettingsConfig):
 
     class Config:
         env_prefix = "PASSWORD_"
+        env_file = f"{BASE_DIR}/.env"
 
 
 class CodeGeneratorConfig(BaseSettingsConfig):
@@ -38,3 +41,4 @@ class CodeGeneratorConfig(BaseSettingsConfig):
 
     class Config:
         env_prefix = "CODE_GENERATOR_"
+        env_file = f"{BASE_DIR}/.env"

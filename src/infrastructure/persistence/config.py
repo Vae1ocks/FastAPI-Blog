@@ -1,6 +1,9 @@
 from pydantic import PostgresDsn
+from pathlib import Path
 
-from setup.configs import BaseSettingsConfig
+from setup.base_config import BaseSettingsConfig
+
+BASE_DIR = Path(__file__).parent.parent.parent.parent
 
 
 class DatabaseConfig(BaseSettingsConfig):
@@ -20,6 +23,7 @@ class DatabaseConfig(BaseSettingsConfig):
     password: str
 
     class Config:
+        env_file = f"{BASE_DIR}/.env"
         env_prefix = "DB_"
 
 
@@ -30,6 +34,7 @@ class SqlaEngineConfig(BaseSettingsConfig):
     max_overflow: int
 
     class Config:
+        env_file = f"{BASE_DIR}/.env"
         env_prefix = "SQLA_ENG_"
 
 
@@ -39,6 +44,7 @@ class SqlaSessionConfig(BaseSettingsConfig):
     expire_on_commit: bool
 
     class Config:
+        env_file = f"{BASE_DIR}/.env"
         env_prefix = "SQLA_SESS_"
 
 
