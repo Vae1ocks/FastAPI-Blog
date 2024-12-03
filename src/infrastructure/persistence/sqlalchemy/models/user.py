@@ -48,7 +48,6 @@ users_table = sa.Table(
     ),
 )
 
-
 def map_users_table() -> None:
     mapper_registry.map_imperatively(
         User,
@@ -57,10 +56,12 @@ def map_users_table() -> None:
             "articles": relationship(
                 "Article",
                 back_populates="author",
+                cascade="all, delete-orphan",
             ),
             "comments": relationship(
                 "Comment",
                 back_populates="author",
+                cascade="all, delete-orphan",
             ),
         },
     )

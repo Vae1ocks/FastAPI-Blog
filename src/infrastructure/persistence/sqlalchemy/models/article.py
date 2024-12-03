@@ -64,6 +64,10 @@ def map_articles_table() -> None:
             "author": relationship(
                 "User",
                 back_populates="articles",
+            ),
+            "comments": relationship(
+                "Comment",
+                back_populates="article",
                 cascade="all, delete-orphan",
             )
         }

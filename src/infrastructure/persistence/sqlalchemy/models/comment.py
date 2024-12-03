@@ -55,12 +55,10 @@ def map_comments_table() -> None:
             "article": relationship(
                 "Article",
                 back_populates="comments",
-                cascade="all, delete-orphan",
             ),
             "author": relationship(
                 "User",
                 back_populates="comments",
-                cascade="all, delete-orphan",
             )
         }
     )
