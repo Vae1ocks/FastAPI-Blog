@@ -8,3 +8,6 @@ class UserCreateScheme(BaseModel):
     email: str
     password: str
     image: BinaryIO | None = None
+
+    class Config:
+        arbitrary_types_allowed = True

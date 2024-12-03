@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from io import BytesIO
+from typing import BinaryIO
 
 from application.dto.other.int_code import ConfirmationCodesDTO
 from application.uow import UnitOfWork
@@ -16,16 +16,17 @@ class UserRegistrationService:
     image_loader: ImageLoader
 
     async def register_unconfirmed(self, uow: UnitOfWork, data: UserCreateDTO) -> User:
-        user = self._validate_unique_email_and_username(
+        user =  await self._validate_unique_email_and_username(
             username=data.username,
             email=data.email,
+            uow=uow,
         )
 
         hashed_password = self.password_hasher.hash(
             raw_password=data.password,
         ).decode()
 
-        image_path = self._process_user_image(file=data.image)
+        image_path = await self._process_user_image(file=data.image)
 
         user = User(
             email=data.email,
@@ -73,7 +74,7 @@ class UserRegistrationService:
 
         raise ValueError("User with such username and email already exists")
 
-    async def _process_user_image(self, file: BytesIO):
+    async def _process_user_image(self, file: BinaryIO):
         self.image_checker.check(file)
         image_path = await self.image_loader(image=file)
         return image_path

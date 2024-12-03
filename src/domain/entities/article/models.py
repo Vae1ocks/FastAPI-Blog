@@ -2,11 +2,13 @@ from dataclasses import dataclass, field
 from enum import StrEnum, auto
 from datetime import datetime, UTC
 from functools import partial
-from typing import List, NewType, TYPE_CHECKING
+from typing import NewType, TYPE_CHECKING
 
 from .value_objects import ArticleTitle, ArticleBody
-from ..user.models import UserId
-from ..comment.models import CommentId
+
+if TYPE_CHECKING:
+    from ..user.models import UserId
+    from ..comment.models import CommentId
 
 ArticleId = NewType("ArticleId", int)
 
@@ -26,5 +28,5 @@ class Article:
     status: ArticleStatus
     created_at: datetime = field(default_factory=UTC_NOW, kw_only=True)
     updated_at: datetime
-    author_id: UserId
-    comments_id: CommentId
+    author_id: "UserId"
+    comments_id: "CommentId"

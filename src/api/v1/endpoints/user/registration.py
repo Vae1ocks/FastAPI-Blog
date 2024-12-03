@@ -1,5 +1,5 @@
 from dependency_injector.wiring import Provide, inject
-from fastapi import APIRouter, Form, status, UploadFile
+from fastapi import APIRouter, Form, status, UploadFile, Depends
 from fastapi.requests import Request
 
 from api.v1.mappers.user.dto_to_scheme import UserDTOToSchemeMapper
@@ -12,20 +12,21 @@ from setup.di_containers.main import MainContainer
 router = APIRouter(prefix="/reg", tags=["Registration"])
 
 
+
 @router.post("/user-data", status_code=status.HTTP_201_CREATED)
 @inject
 async def user_data_input(
     request: Request,
-    image: UploadFile,
     username: str = Form(),
     email: str = Form(),
     password: str = Form(),
-    user_registration_usecase=Provide[
+    image: UploadFile | None = None,
+    user_registration_usecase=Depends(Provide[
         MainContainer.application_container.user_registration_usecase
-    ],
+    ]),
 ):
     request_scheme = UserCreateScheme(
-        image=image.file,
+        image=image.file if image else None,
         username=username,
         email=email,
         password=password,
