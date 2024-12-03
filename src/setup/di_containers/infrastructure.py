@@ -2,6 +2,7 @@ from dependency_injector.containers import DeclarativeContainer
 from dependency_injector.providers import Singleton, Factory
 
 from infrastructure.providers.code_generator import RandomIntegerCodeGenerator
+from infrastructure.providers.email_sender import EmailSender
 from infrastructure.providers.file_operators import (
     ImageCheckerImpl,
     FileSystemImageLoader,
@@ -27,4 +28,11 @@ class InfrastructureContainer(DeclarativeContainer):
         RandomIntegerCodeGenerator,
         min_val=configs.code_generator.min_val,
         max_val=configs.code_generator.max_val,
+    )
+    email_sender: EmailSender = Singleton(
+        EmailSender,
+        host=configs.smtp.host,
+        host_user=configs.smtp.host_user,
+        host_password=configs.smtp.host_password,
+        port=configs.smtp.port,
     )

@@ -12,11 +12,11 @@ class DbContainer(DeclarativeContainer):
         pg_dsn=configs.db.url,
         settings=configs.sqla_eng,
     )
-    session_maker = Factory(
+    session_factory = Factory(
         get_async_sessionmaker,
         engine=engine,
         settings=configs.sqla_sess,
     )
     uow: SQLAUnitOfWork = Factory(
-        SQLAUnitOfWork, session_maker=session_maker
+        SQLAUnitOfWork, session_factory=session_factory
     )
