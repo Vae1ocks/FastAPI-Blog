@@ -26,7 +26,9 @@ class UserRegistrationService:
             raw_password=data.password,
         ).decode()
 
-        image_path = await self._process_user_image(file=data.image)
+        image_path = None
+        if data.image:
+            image_path = await self._process_user_image(file=data.image)
 
         user = User(
             email=data.email,
