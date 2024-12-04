@@ -1,5 +1,7 @@
 from dataclasses import dataclass
 
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from application.uow import UnitOfWork
 from infrastructure.repositories.sqlalchemy.user_repository import UserRepositoryImpl
 from infrastructure.repositories.sqlalchemy.article_repository import ArticleRepositoryImpl
@@ -15,7 +17,7 @@ class SQLAUnitOfWork(UnitOfWork):
         self._comment_repository = None
 
     async def __aenter__(self):
-        self.session = self._session_factory()
+        self.session: AsyncSession = self._session_factory()
         return self
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):
@@ -23,13 +25,13 @@ class SQLAUnitOfWork(UnitOfWork):
             await self.rollback()
         else:
             await self.session.commit()
-        self.session.close()
+        await self.session.close()
 
-    async def commit(self):
-        self.session.commit()
+    async def flush(self):
+        await self.session.commit()
 
     async def rollback(self):
-        self.session.rollback()
+        await self.session.rollback()
 
     @property
     def user_repository(self):

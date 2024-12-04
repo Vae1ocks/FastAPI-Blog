@@ -10,7 +10,7 @@ class UnitOfWork(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    async def commit(self):
+    async def flush(self):
         raise NotImplementedError()
 
     @abstractmethod

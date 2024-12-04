@@ -38,6 +38,7 @@ class UserRegistrationService:
         )
 
         uow.user_repository.add(user)
+        await uow.flush()
         return user
 
     async def confirm_user(self, uow: UnitOfWork, data: ConfirmationCodesDTO):  # noqa
