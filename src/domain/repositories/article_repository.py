@@ -13,7 +13,7 @@ class ArticleRepository(Protocol):
     async def get_by_status(self, status: ArticleStatus, limit: int, offset: int) -> List[Article | None]:
         ...
 
-    async def add(self, values: dict) -> Article:
+    def add(self, values: dict) -> Article:
         ...
 
     async def delete(self, article: Article) -> None:

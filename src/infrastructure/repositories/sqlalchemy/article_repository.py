@@ -28,7 +28,7 @@ class ArticleRepositoryImpl:
         )
         return list((await self.session.scalars(stmt)).all())
 
-    async def add(self, article: Article) -> None:
+    def add(self, article: Article) -> None:
         self.session.add(article)
 
     async def delete(self, article_id: ArticleId) -> None:

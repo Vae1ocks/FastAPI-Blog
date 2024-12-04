@@ -19,7 +19,7 @@ class CommentRepositoryImpl:
         result = (await self.session.execute(stmt)).scalars()
         return list(result.all())
 
-    async def add(self, comment: Comment) -> None:
+    def add(self, comment: Comment) -> None:
         self.session.add(comment)
 
     async def delete(self, comment_id: Comment) -> None:

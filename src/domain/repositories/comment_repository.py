@@ -11,7 +11,7 @@ class CommentRepository(Protocol):
     async def get_by_article(self, article: Article) -> List[Comment | None]:
         ...
 
-    async def add(self, values: dict) -> Comment:
+    def add(self, values: dict) -> Comment:
         ...
 
     async def delete(self, comment: Comment) -> None:

@@ -61,7 +61,7 @@ class UserRepositoryImpl:
         )
         return list((await self.session.execute(stmt)).scalars())
 
-    async def add(self, user: User) -> None:
+    def add(self, user: User) -> None:
         self.session.add(user)
 
     async def delete(self, user_id: UserId) -> None:
