@@ -1,5 +1,5 @@
 from dependency_injector.wiring import Provide, inject
-from fastapi import APIRouter, Form, status, UploadFile, Depends
+from fastapi import APIRouter, Form, status, UploadFile, Depends, HTTPException
 from fastapi.requests import Request
 
 from api.v1.mappers.user.dto_to_scheme import UserDTOToSchemeMapper
