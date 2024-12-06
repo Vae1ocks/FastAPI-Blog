@@ -16,6 +16,11 @@ def send_email(
     msg += message
 
     with smtplib.SMTP(host, port) as server:
-        server.starttls()
-        server.login(host_user, host_password)
-        server.sendmail(host_user, emails, msg)
+        try:
+            server.starttls()
+            server.login(host_user, host_password)
+            server.sendmail(host_user, emails, msg)
+        except smtplib.SMTPRecipientsRefused:
+            pass
+        except Exception as e: # noqa
+            ... # TODO: Logging

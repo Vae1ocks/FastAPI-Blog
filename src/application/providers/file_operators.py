@@ -5,7 +5,7 @@ from typing import BinaryIO
 class ImageChecker(ABC):
     @staticmethod
     @abstractmethod
-    def check(file: BinaryIO):
+    def check(file: BinaryIO) -> None:
         ...
 
 

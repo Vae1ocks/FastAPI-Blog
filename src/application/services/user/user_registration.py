@@ -2,6 +2,12 @@ from dataclasses import dataclass
 from typing import BinaryIO
 
 from application.dto.other.int_code import ConfirmationCodesDTO
+from application.errors.common.code_mismatch import CodeMismatchError
+from application.errors.user import (
+    UserUsernameEmailAlreadyExistsError,
+    UserUsernameAlreadyExistsError,
+    UserEmailAlreadyExistsError,
+)
 from application.uow import UnitOfWork
 from application.dto.user.user_create import UserCreateDTO
 from application.providers.file_operators import ImageChecker, ImageLoader
@@ -16,7 +22,7 @@ class UserRegistrationService:
     image_loader: ImageLoader
 
     async def register_unconfirmed(self, uow: UnitOfWork, data: UserCreateDTO) -> User:
-        user =  await self._validate_unique_email_and_username(
+        user = await self._validate_unique_email_and_username(
             username=data.username,
             email=data.email,
             uow=uow,
@@ -43,7 +49,7 @@ class UserRegistrationService:
 
     async def confirm_user(self, uow: UnitOfWork, data: ConfirmationCodesDTO):  # noqa
         if data.expected_code != data.provided_code:
-            raise ValueError("Code mismatch")
+            raise CodeMismatchError()
 
         user: User = await uow.user_repository.get_by_id(user_id=data.user_id)
         user.confirm_registration()
@@ -68,14 +74,15 @@ class UserRegistrationService:
             if user.email == email and user.username == username:
                 if not user.is_confirmed and user.is_active:
                     return
-                raise ValueError("User with such username and email already exists")
+                raise UserUsernameEmailAlreadyExistsError(
+                    username=username, email=email
+                )
 
-            text = "User with such email already exists"
             if user.username == username:
-                text = "User with such username already exists"
-            raise ValueError(text)
+                raise UserUsernameAlreadyExistsError(username=username)
+            raise UserEmailAlreadyExistsError(email=email)
 
-        raise ValueError("User with such username and email already exists")
+        raise UserUsernameEmailAlreadyExistsError(username=username, email=email)
 
     async def _process_user_image(self, file: BinaryIO):
         self.image_checker.check(file)
