@@ -18,16 +18,10 @@ class User:
     is_superuser: bool = False
 
     def confirm_registration(self) -> None:
-        if self.is_confirmed:
-            raise ValueError("User is already confirmed")
         self.is_confirmed = True
 
-    def active(self):
-        if self.is_active:
-            raise ValueError("User is already active")
+    def activate(self):
         self.is_active = True
 
     def deactivate(self):
-        if not self.is_active:
-            raise ValueError("User is already inactive")
         self.is_active = False
