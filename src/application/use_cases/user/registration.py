@@ -5,7 +5,7 @@ from application.dto.user.user_read import UserReadDTO
 from application.mappers.user.user_to_dto import UserToDTOMapper
 from application.dto.user.user_create import UserCreateDTO
 from application.providers.code_generator import RandomCodeGenerator
-from application.services.user_registration import UserRegistrationService
+from application.services.user.user_registration import UserRegistrationService
 from application.uow import UnitOfWork
 from infrastructure.providers.email_sender import EmailSender
 

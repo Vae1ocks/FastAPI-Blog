@@ -1,7 +1,7 @@
 from dependency_injector.containers import DeclarativeContainer
 from dependency_injector.providers import Factory, DependenciesContainer
 
-from application.services.user_registration import UserRegistrationService
+from application.services.user.user_registration import UserRegistrationService
 from application.use_cases.user.registration import (
     RegistrationConfirmationUseCase,
     RegistrationUseCase,
