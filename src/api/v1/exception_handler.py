@@ -1,11 +1,40 @@
-from fastapi import status
+from dataclasses import dataclass
+from typing import Any
+
+from fastapi import FastAPI, Request, status
 import pydantic
+from fastapi.responses import ORJSONResponse
+from fastapi.encoders import jsonable_encoder
+from pydantic_core import ErrorDetails
 
 from application.errors.article import ArticleTitleNotFound
-from application.errors.common.validation import ObjectNotExistsError, AlreadyExistsError, FileNotImageError
-from application.errors.user import AuthenticationError, AlreadyAuthenticatedError, AuthorizationError, \
-    UserUsernameEmailAlreadyExistsError, UserEmailAlreadyExistsError, UserUsernameAlreadyExistsError, \
-    UserEmailNotFoundError, UserUsernameNotFoundError
+from application.errors.common.validation import (
+    ObjectNotExistsError,
+    AlreadyExistsError,
+    FileNotImageError,
+)
+from application.errors.user import (
+    AuthenticationError,
+    AlreadyAuthenticatedError,
+    AuthorizationError,
+    UserUsernameEmailAlreadyExistsError,
+    UserEmailAlreadyExistsError,
+    UserUsernameAlreadyExistsError,
+    UserEmailNotFoundError,
+    UserUsernameNotFoundError,
+)
+
+
+@dataclass(frozen=True, slots=True)
+class ExceptionSchema:
+    description: str
+
+
+@dataclass(frozen=True, slots=True)
+class ExceptionSchemaRich:
+    description: str
+    details: list[dict[str, Any]] | None = None
+
 
 
 class ExceptionMessageProvider:
@@ -31,3 +60,65 @@ class ExceptionMapper:
             UserEmailNotFoundError: status.HTTP_404_NOT_FOUND,
             UserUsernameNotFoundError: status.HTTP_404_NOT_FOUND,
         }
+
+    def get_status_code(self, exc: Exception) -> int:
+        return self.exception_status_code_map.get(
+            type(exc), status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+
+
+@dataclass
+class ExceptionHandler:
+    app: FastAPI
+    exception_message_provider: ExceptionMessageProvider
+    mapper: ExceptionMapper
+
+    def setup_handlers(self) -> None:
+        for exc_class in self.mapper.exception_status_code_map:
+            self.app.add_exception_handler(exc_class, self.handle_exception)
+        self.app.add_exception_handler(Exception, self.handle_unexpected_exceptions)
+
+    async def handle_exception(self, _: Request, exc: Exception) -> ORJSONResponse:
+        status_code: int = self.mapper.get_status_code(exc)
+        if status_code >= 500:
+            # TODO: Logging
+            ...
+        else:
+            # TODO: Logging
+            ...
+
+        exception_message: str = self.exception_message_provider.get_exception_message(
+            exc, status_code
+        )
+        details: list[ErrorDetails] | None = (
+            exc.errors() if isinstance(exc, pydantic.ValidationError) else None
+        )
+
+        return self.create_exception_response(
+            details=details,
+            status_code=status_code,
+            exception_message=exception_message,
+        )
+
+    def handle_unexpected_exceptions(
+        self, _: Request, exc: Exception
+    ) -> ORJSONResponse:
+        # TODO: Logging
+        exception_message: str = "Internal server error"
+        return self.create_exception_response(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            exception_message=exception_message,
+        )
+
+    @staticmethod
+    def create_exception_response(
+        status_code: int,
+        exception_message: str,
+        details: list[ErrorDetails] | None = None,
+    ) -> ORJSONResponse:
+        response_content: ExceptionSchemaRich | ExceptionSchema = (
+            ExceptionSchemaRich(exception_message, jsonable_encoder(details))
+            if details
+            else ExceptionSchema(exception_message)
+        )
+        return ORJSONResponse(status_code=status_code, content=response_content)
