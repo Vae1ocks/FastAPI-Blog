@@ -41,6 +41,7 @@ async def user_data_input(
         "user_id": user_dto.id,
         "confirmation_code": code,
     }
+    print(code)  # TODO
     response: UserReadScheme = UserDTOToSchemeMapper.to_read_scheme(dto=user_dto)
     return response
 
