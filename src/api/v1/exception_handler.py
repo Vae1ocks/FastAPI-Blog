@@ -8,6 +8,7 @@ from fastapi.encoders import jsonable_encoder
 from pydantic_core import ErrorDetails
 
 from application.errors.article import ArticleTitleNotFound
+from application.errors.common.code_mismatch import CodeMismatchError
 from application.errors.common.validation import (
     ObjectNotExistsError,
     AlreadyExistsError,
@@ -48,6 +49,7 @@ class ExceptionMapper:
         self.exception_status_code_map: dict[type[Exception], int] = {
             pydantic.ValidationError: status.HTTP_400_BAD_REQUEST,
             FileNotImageError: status.HTTP_400_BAD_REQUEST,
+            CodeMismatchError: status.HTTP_400_BAD_REQUEST,
             AuthenticationError: status.HTTP_401_UNAUTHORIZED,
             AlreadyAuthenticatedError: status.HTTP_401_UNAUTHORIZED,
             AuthorizationError: status.HTTP_403_FORBIDDEN,
