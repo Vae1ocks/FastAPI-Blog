@@ -9,7 +9,7 @@ class ArticleTitleNotFound(ApplicationError):
 
     @property
     def message(self) -> str:
-        return f"Article not found by {self.title=}"
+        return f"Article not found by title={self.title}"
 
     def __str__(self) -> str:
         return self.message

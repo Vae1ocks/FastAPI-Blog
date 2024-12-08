@@ -21,7 +21,7 @@ class UserEmailNotFoundError(ApplicationError):
 
     @property
     def message(self) -> str:
-        return f"User not found by {self.email=}"
+        return f"User not found by email={self.email}"
 
     def __str__(self) -> str:
         return self.message
@@ -33,7 +33,7 @@ class UserUsernameNotFoundError(ApplicationError):
 
     @property
     def message(self) -> str:
-        return f"User not found by {self.username=}"
+        return f"User not found by username={self.username}"
 
     def __str__(self) -> str:
         return self.message
@@ -45,7 +45,7 @@ class UserEmailAlreadyExistsError(ApplicationError):
 
     @property
     def message(self) -> str:
-        return f"User with {self.email=} already exists"
+        return f"User with email={self.email} already exists"
 
     def __str__(self) -> str:
         return self.message
@@ -57,7 +57,7 @@ class UserUsernameAlreadyExistsError(ApplicationError):
 
     @property
     def message(self) -> str:
-        return f"User with {self.username=} already exists"
+        return f"User with username={self.username} already exists"
 
     def __str__(self) -> str:
         return self.message
@@ -70,7 +70,9 @@ class UserUsernameEmailAlreadyExistsError(ApplicationError):
 
     @property
     def message(self) -> str:
-        return f"User with {self.username=} and {self.email=} already exists"
+        return (
+            f"User with username={self.username} and email={self.email} already exists"
+        )
 
     def __str__(self) -> str:
         return self.message
