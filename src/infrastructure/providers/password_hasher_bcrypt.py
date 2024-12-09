@@ -6,8 +6,7 @@ import base64
 import hmac
 
 from application.providers.password_hasher import PasswordHasher
-
-PasswordPepper = NewType("PasswordPepper", str)
+from infrastructure.types import PasswordPepper
 
 
 class BcryptPasswordHasher(PasswordHasher):
