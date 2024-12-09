@@ -1,5 +1,7 @@
+from api.v1.schemes.user.login import LoginScheme
 from api.v1.schemes.user.user_create import UserCreateScheme
 from api.v1.schemes.user.user_read import UserReadScheme
+from application.dto.user.login import LoginUsernamePasswordDTO
 from application.dto.user.user_create import UserCreateDTO
 from application.dto.user.user_read import UserReadDTO
 
@@ -23,4 +25,11 @@ class UserSchemeToDTOMapper:
             email=scheme.email,
             password=scheme.password,
             image=scheme.image,
+        )
+
+    @staticmethod
+    def to_login_dto(scheme: LoginScheme) -> LoginUsernamePasswordDTO:
+        return LoginUsernamePasswordDTO(
+            username=scheme.username,
+            password=scheme.password,
         )

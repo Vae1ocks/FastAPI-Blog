@@ -13,9 +13,9 @@ class JWTTokenProcessor:
     access_token_processor: None
     refresh_token_processor: None
 
-    def generate_refresh_access_tokens(self, user_id: int):
-        access_token: str = self.access_token_processor.encode_jwt(user_id=user_id)
-        refresh_token: str = self.refresh_token_processor.encode_jwt(user_id=user_id)
+    def generate_refresh_access_tokens(self, payload: dict):
+        access_token: str = self.access_token_processor.encode_jwt(payload=payload)
+        refresh_token: str = self.refresh_token_processor.encode_jwt(payload=payload)
         return {"access": access_token, "refresh": refresh_token}
 
 
