@@ -7,6 +7,7 @@ from fastapi.responses import ORJSONResponse
 from fastapi.encoders import jsonable_encoder
 from pydantic_core import ErrorDetails
 
+from application.common.error import ApplicationError
 from application.errors.article import ArticleTitleNotFound
 from application.errors.common.code_mismatch import CodeMismatchError
 from application.errors.common.validation import (
@@ -24,6 +25,8 @@ from application.errors.user import (
     UserEmailNotFoundError,
     UserUsernameNotFoundError,
 )
+from domain.entities.common.errors import DomainError
+from domain.entities.user.errors import UserAlreadyActiveError, UserAlreadyConfirmedError, UserAlreadyDeactivatedError
 
 
 @dataclass(frozen=True, slots=True)
@@ -61,6 +64,11 @@ class ExceptionMapper:
             ArticleTitleNotFound: status.HTTP_404_NOT_FOUND,
             UserEmailNotFoundError: status.HTTP_404_NOT_FOUND,
             UserUsernameNotFoundError: status.HTTP_404_NOT_FOUND,
+            UserAlreadyActiveError: status.HTTP_409_CONFLICT,
+            UserAlreadyConfirmedError: status.HTTP_409_CONFLICT,
+            UserAlreadyDeactivatedError: status.HTTP_409_CONFLICT,
+            DomainError: status.HTTP_500_INTERNAL_SERVER_ERROR,
+            ApplicationError: status.HTTP_500_INTERNAL_SERVER_ERROR,
         }
 
     def get_status_code(self, exc: Exception) -> int:
