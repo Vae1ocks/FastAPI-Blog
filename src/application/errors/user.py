@@ -3,16 +3,28 @@ from dataclasses import dataclass
 from application.common.error import ApplicationError
 
 
+@dataclass
 class AuthorizationError(ApplicationError):
-    pass
+    message: str = "Authorization error occurred"
+
+    def __str__(self) -> str:
+        return self.message
 
 
+@dataclass
 class AuthenticationError(ApplicationError):
-    pass
+    message: str = "Authentication error occurred"
+
+    def __str__(self) -> str:
+        return self.message
 
 
+@dataclass
 class AlreadyAuthenticatedError(ApplicationError):
-    pass
+    message: str = "You are already authenticated. Consider logging out"
+
+    def __str__(self) -> str:
+        return self.message
 
 
 @dataclass
