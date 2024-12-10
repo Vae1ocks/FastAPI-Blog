@@ -1,7 +1,10 @@
 from dependency_injector.containers import DeclarativeContainer
-from dependency_injector.providers import Factory, DependenciesContainer
+from dependency_injector.providers import Factory, DependenciesContainer, Singleton
 
+from application.services.jwt.token_validation import TokenValidationService
+from application.services.user.login import LoginUsernamePasswordService
 from application.services.user.user_registration import UserRegistrationService
+from application.use_cases.user.login import LoginUseCase
 from application.use_cases.user.registration import (
     RegistrationConfirmationUseCase,
     RegistrationUseCase,
@@ -31,4 +34,20 @@ class ApplicationContainer(DeclarativeContainer):
         RegistrationConfirmationUseCase,
         registration_service=user_registration_service,
         uow=db_container.uow,
+    )
+
+    token_validation_service: TokenValidationService = Singleton(
+        TokenValidationService,
+        jwt_processor=infrastructure_container.jwt_processor,
+    )
+    login_service: LoginUsernamePasswordService = Singleton(
+        LoginUsernamePasswordService,
+        jwt_processor=infrastructure_container.jwt_processor,
+        password_hasher=infrastructure_container.password_hasher,
+    )
+    login_usecase: LoginUseCase = Factory(
+        LoginUseCase,
+        uow=db_container.uow,
+        login_service=login_service,
+        token_validation_service=token_validation_service,
     )

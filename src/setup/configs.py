@@ -2,7 +2,7 @@ from pathlib import Path
 
 from infrastructure.celery.config import RedisConfig, SMTPConfig, CeleryConfig
 from infrastructure.persistence.config import DatabaseConfig, SqlaEngineConfig, SqlaSessionConfig
-from infrastructure.providers.config import FileConfig, PepperConfig, CodeGeneratorConfig
+from infrastructure.providers.config import FileConfig, PepperConfig, CodeGeneratorConfig, JWTConfig
 from setup.base_config import BaseSettingsConfig
 
 BASE_DIR = Path(__file__).parent.parent.parent
@@ -38,6 +38,7 @@ class AllConfigs(BaseSettingsConfig):
     celery: CeleryConfig = CeleryConfig()
     session: SessionConfig = SessionConfig()
     uvicorn: UvicornConfig = UvicornConfig()
+    jwt: JWTConfig = JWTConfig()
 
 
 configs = AllConfigs()
