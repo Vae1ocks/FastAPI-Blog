@@ -22,13 +22,13 @@ class UserRegistrationService:
     image_loader: ImageLoader
 
     async def register_unconfirmed(self, uow: UnitOfWork, data: UserCreateDTO) -> User:
-        user = await self._validate_unique_email_and_username(
+        user: User | None = await self._validate_unique_email_and_username(
             username=data.username,
             email=data.email,
             uow=uow,
         )
 
-        hashed_password = self.password_hasher.hash(
+        hashed_password: str = self.password_hasher.hash(
             raw_password=data.password,
         ).decode()
 
@@ -36,15 +36,15 @@ class UserRegistrationService:
         if data.image:
             image_path = await self._process_user_image(file=data.image)
 
-        user = User(
-            email=data.email,
-            username=data.username,
-            password=hashed_password,
-            image_path=image_path,
-        )
-
-        uow.user_repository.add(user)
-        await uow.flush()
+        if user is None:
+            user = User(
+                email=data.email,
+                username=data.username,
+                password=hashed_password,
+                image_path=image_path,
+            )
+            uow.user_repository.add(user)
+            await uow.flush()
         return user
 
     async def confirm_user(self, uow: UnitOfWork, data: ConfirmationCodesDTO):  # noqa
@@ -58,7 +58,7 @@ class UserRegistrationService:
 
     async def _validate_unique_email_and_username(  # noqa
         self, uow: UnitOfWork, username: str, email: str
-    ):
+    ) -> User | None:
         existing_users = await uow.user_repository.get_by_email_or_username(
             username=username, email=email
         )
@@ -73,7 +73,7 @@ class UserRegistrationService:
             user = existing_users[0]
             if user.email == email and user.username == username:
                 if not user.is_confirmed and user.is_active:
-                    return
+                    return user
                 raise UserUsernameEmailAlreadyExistsError(
                     username=username, email=email
                 )
