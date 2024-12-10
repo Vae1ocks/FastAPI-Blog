@@ -10,8 +10,8 @@ from application.errors.user import (
 )
 from application.uow import UnitOfWork
 from application.dto.user.user_create import UserCreateDTO
-from application.providers.file_operators import ImageChecker, ImageLoader
-from application.providers.password_hasher import PasswordHasher
+from application.processors.file_operators import ImageChecker, ImageLoader
+from application.processors.password_hasher import PasswordHasher
 from domain.entities.user.models import User
 
 

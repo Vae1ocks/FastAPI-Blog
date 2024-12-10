@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 from application.uow import UnitOfWork
 from domain.entities.user.models import User
-from infrastructure.providers.jwt_processor import JWTTokenProcessor
+from infrastructure.processors.jwt_processor import JWTTokenProcessor
 
 
 @dataclass

@@ -1,6 +1,6 @@
 from random import randint
 
-from application.providers.code_generator import RandomCodeGenerator
+from application.processors.code_generator import RandomCodeGenerator
 
 
 class RandomIntegerCodeGenerator(RandomCodeGenerator):

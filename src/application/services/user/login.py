@@ -6,10 +6,10 @@ from application.errors.user import (
     AuthorizationError,
     AuthenticationError,
 )
-from application.providers.password_hasher import PasswordHasher
+from application.processors.password_hasher import PasswordHasher
 from application.uow import UnitOfWork
 from domain.entities.user.models import User
-from infrastructure.providers.jwt_processor import JWTTokenProcessor
+from infrastructure.processors.jwt_processor import JWTTokenProcessor
 
 
 @dataclass

@@ -4,10 +4,11 @@ from application.dto.other.int_code import ConfirmationCodesDTO
 from application.dto.user.user_read import UserReadDTO
 from application.mappers.user.user_to_dto import UserToDTOMapper
 from application.dto.user.user_create import UserCreateDTO
-from application.providers.code_generator import RandomCodeGenerator
+from application.processors.code_generator import RandomCodeGenerator
 from application.services.user.user_registration import UserRegistrationService
 from application.uow import UnitOfWork
-from infrastructure.providers.email_sender import EmailSender
+from domain.entities.user.models import User
+from infrastructure.processors.email_sender import EmailSender
 
 
 @dataclass
@@ -19,7 +20,7 @@ class RegistrationUseCase:
 
     async def execute(self, dto: UserCreateDTO) -> tuple[UserReadDTO, int]:
         async with self.uow as uow:
-            user = await self.registration_service.register_unconfirmed(
+            user: User = await self.registration_service.register_unconfirmed(
                 uow=uow, data=dto
             )
             code = self.code_generator()

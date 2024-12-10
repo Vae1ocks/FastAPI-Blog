@@ -6,7 +6,7 @@ from pathlib import Path
 import aiofiles
 
 from application.errors.common.validation import FileNotImageError
-from application.providers.file_operators import ImageChecker, ImageLoader
+from application.processors.file_operators import ImageChecker, ImageLoader
 
 
 class ImageCheckerImpl(ImageChecker):

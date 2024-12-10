@@ -5,7 +5,7 @@ import hashlib
 import base64
 import hmac
 
-from application.providers.password_hasher import PasswordHasher
+from application.processors.password_hasher import PasswordHasher
 from infrastructure.types import PasswordPepper
 
 

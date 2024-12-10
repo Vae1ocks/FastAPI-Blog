@@ -1,19 +1,19 @@
 from dependency_injector.containers import DeclarativeContainer
 from dependency_injector.providers import Singleton, Factory
 
-from infrastructure.providers.code_generator import RandomIntegerCodeGenerator
-from infrastructure.providers.email_sender import EmailSender
-from infrastructure.providers.file_operators import (
+from infrastructure.processors.code_generator import RandomIntegerCodeGenerator
+from infrastructure.processors.email_sender import EmailSender
+from infrastructure.processors.file_operators import (
     ImageCheckerImpl,
     FileSystemImageLoader,
 )
-from infrastructure.providers.jwt_processor import (
+from infrastructure.processors.jwt_processor import (
     JWTGeneralTokenProcessor,
     JWTAccessTokenProcessor,
     JWTRefreshTokenProcessor,
     JWTTokenProcessor,
 )
-from infrastructure.providers.password_hasher_bcrypt import BcryptPasswordHasher
+from infrastructure.processors.password_hasher_bcrypt import BcryptPasswordHasher
 from setup.configs import configs
 
 

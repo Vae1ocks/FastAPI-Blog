@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from application.providers.email_sender import MailSender
+from application.processors.email_sender import MailSender
 from infrastructure.celery.tasks import send_email
 
 @dataclass(frozen=True)
