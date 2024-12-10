@@ -28,6 +28,14 @@ class AlreadyAuthenticatedError(ApplicationError):
 
 
 @dataclass
+class TokenInvalid(ApplicationError):
+    message: str = "Token invalid"
+
+    def __str__(self) -> str:
+        return self.message
+
+
+@dataclass
 class UserEmailNotFoundError(ApplicationError):
     email: str
 
