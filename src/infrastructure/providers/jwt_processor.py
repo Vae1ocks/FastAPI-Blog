@@ -4,20 +4,8 @@ from datetime import datetime, timedelta, UTC
 import jwt
 from jwt import ExpiredSignatureError, InvalidTokenError
 
-from application.errors.user import AuthorizationError, AuthenticationError
+from application.errors.user import AuthorizationError, AuthenticationError, TokenInvalid
 from infrastructure.types import JWTSecret, JWTAlgorithm
-
-
-@dataclass
-class JWTTokenProcessor:
-    access_token_processor: None
-    refresh_token_processor: None
-
-    def generate_refresh_access_tokens(self, payload: dict):
-        access_token: str = self.access_token_processor.encode_jwt(payload=payload)
-        refresh_token: str = self.refresh_token_processor.encode_jwt(payload=payload)
-        return {"access": access_token, "refresh": refresh_token}
-
 
 
 @dataclass
@@ -33,9 +21,9 @@ class JWTGeneralTokenProcessor:
         try:
             decoded = jwt.decode(token, self.secret, algorithms=[self.algorithm])
         except ExpiredSignatureError:
-            raise AuthorizationError("Token invalid")
+            raise TokenInvalid("Token invalid")
         except InvalidTokenError:
-            raise AuthorizationError("Token invalid")
+            raise TokenInvalid("Token invalid")
         return decoded
 
 
@@ -56,7 +44,7 @@ class JWTAccessTokenProcessor:
     def validate_and_decode(self, token: str | bytes) -> dict:
         decoded: dict = self.jwt_general.decode_jwt(token=token)
         if decoded["type"] != self.token_type:
-            raise AuthenticationError("Token invalid")
+            raise TokenInvalid("Token invalid")
         return decoded
 
 
@@ -76,5 +64,17 @@ class JWTRefreshTokenProcessor:
     def validate_and_decode(self, token: str | bytes) -> dict:
         decoded: dict = self.jwt_general.decode_jwt(token=token)
         if decoded["type"] != self.token_type:
-            raise AuthenticationError("Token invalid")
+            raise TokenInvalid("Token invalid")
         return decoded
+
+
+
+@dataclass
+class JWTTokenProcessor:
+    access_token_processor: JWTAccessTokenProcessor
+    refresh_token_processor: JWTRefreshTokenProcessor
+
+    def generate_refresh_access_tokens(self, payload: dict):
+        access_token: str = self.access_token_processor.encode_jwt(payload=payload)
+        refresh_token: str = self.refresh_token_processor.encode_jwt(payload=payload)
+        return {"access": access_token, "refresh": refresh_token}
