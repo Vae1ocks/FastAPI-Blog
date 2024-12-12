@@ -27,7 +27,6 @@ class JWTGeneralTokenProcessor:
         return decoded
 
 
-
 @dataclass
 class JWTAccessTokenProcessor:
     expire_minutes: int

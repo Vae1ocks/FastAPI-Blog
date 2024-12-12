@@ -18,7 +18,7 @@ class LoginUseCase:
         async with self.uow as uow:
             if token is not None:
                 try:
-                    user: User | None = await self.token_validation_service.validate_access(
+                    user: User = await self.token_validation_service.validate_access(
                         token=token, uow=uow
                     )
                     if user is not None:
