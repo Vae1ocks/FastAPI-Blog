@@ -25,6 +25,7 @@ pillow = "^11.0.0"
 aiofiles = "^24.1.0"
 dependency-injector = "^4.43.0"
 orjson = "^3.10.12"
+dishka = "^1.4.2"
 
 
 [build-system]
