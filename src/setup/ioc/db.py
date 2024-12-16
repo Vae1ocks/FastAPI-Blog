@@ -8,21 +8,17 @@ from sqlalchemy.ext.asyncio import (
     AsyncSession,
 )
 
-from infrastructure.persistence.config import (
-    SqlaEngineConfig,
-    DatabaseConfig,
-    SqlaSessionConfig,
-)
+from application.uow import UnitOfWork
+from setup.configs import AllConfigs
 
 
 class DatabaseProvider(Provider):
-    @provide
+    @provide(scope=Scope.APP)
     async def provide_async_engine(
         self,
-        db_settings: DatabaseConfig,
-        engine_config: SqlaEngineConfig,
+        configs: AllConfigs,
     ) -> AsyncIterable[AsyncEngine]:
-        async_engine_params = {"url": db_settings.url, **engine_config.model_dump()}
+        async_engine_params = {"url": configs.db.url, **configs.sqla_eng.model_dump()}
         async_engine = create_async_engine(**async_engine_params)
         yield async_engine
         await async_engine.dispose()
@@ -31,11 +27,11 @@ class DatabaseProvider(Provider):
     def provide_async_session_maker(
         self,
         async_engine: AsyncEngine,
-        session_settings: SqlaSessionConfig,
+        configs: AllConfigs
     ) -> async_sessionmaker[AsyncSession]:
-        return async_sessionmaker(bind=async_engine, **session_settings.model_dump())
+        return async_sessionmaker(bind=async_engine, **configs.sqla_sess.model_dump())
 
-    @provide(scope=Scope.REQUEST)
+    @provide(scope=Scope.REQUEST, provides=UnitOfWork)
     async def provide_async_session(
         self,
         async_session_maker: async_sessionmaker[AsyncSession],

@@ -1,4 +1,4 @@
-from dishka import Provider, provide
+from dishka import Provider, provide, Scope
 
 from application.processors.code_generator import RandomCodeGenerator
 from application.processors.email_sender import MailSender
@@ -21,75 +21,73 @@ from setup.configs import AllConfigs
 
 
 class InfrastructureProvider(Provider):
-    def __init__(self, configs: AllConfigs):
-        super().__init__()
-        self.configs = configs
-
-    @provide
-    def provide_password_pepper(self) -> PasswordPepper:
-        return PasswordPepper(self.configs.pepper_settings.pepper)
+    @provide(scope=Scope.APP)
+    def provide_password_pepper(self, configs: AllConfigs) -> PasswordPepper:
+        return PasswordPepper(configs.pepper.pepper)
 
     password_hasher = provide(
         source=BcryptPasswordHasher,
         provides=PasswordHasher,
+        scope=Scope.APP
     )
 
     image_checker = provide(
         source=ImageCheckerImpl,
         provides=ImageChecker,
+        scope=Scope.APP
     )
 
-    @provide(provides=ImageLoader)
-    def provide_image_loader(self) -> FileSystemImageLoader:
+    @provide(provides=ImageLoader, scope=Scope.APP)
+    def provide_image_loader(self, configs: AllConfigs) -> FileSystemImageLoader:
         return FileSystemImageLoader(
-            directory=self.configs.file.users_profile_images_directory,
-            file_name_patter=self.configs.file.file_save_time_pattern,
+            directory=configs.file.users_profile_images_directory,
+            file_name_patter=configs.file.file_save_time_pattern,
         )
 
-    @provide(provides=RandomCodeGenerator)
-    def provide_code_generator(self) -> RandomIntegerCodeGenerator:
+    @provide(provides=RandomCodeGenerator, scope=Scope.APP)
+    def provide_code_generator(self, configs: AllConfigs) -> RandomIntegerCodeGenerator:
         return RandomIntegerCodeGenerator(
-            min_val=self.configs.code_generator.min_val,
-            max_val=self.configs.code_generator.max_val,
+            min_val=configs.code_generator.min_val,
+            max_val=configs.code_generator.max_val,
         )
 
-    @provide(provides=MailSender)
-    def provide_email_sender(self) -> EmailSender:
+    @provide(provides=MailSender, scope=Scope.APP)
+    def provide_email_sender(self, configs: AllConfigs) -> EmailSender:
         return EmailSender(
-            host=self.configs.smtp.host,
-            host_user=self.configs.smtp.host_user,
-            host_password=self.configs.smtp.host_password,
-            port=self.configs.smtp.port,
+            host=configs.smtp.host,
+            host_user=configs.smtp.host_user,
+            host_password=configs.smtp.host_password,
+            port=configs.smtp.port,
         )
 
-    @provide
-    def provide_jwt_general_processor(self) -> JWTGeneralTokenProcessor:
+    @provide(scope=Scope.APP)
+    def provide_jwt_general_processor(self, configs: AllConfigs) -> JWTGeneralTokenProcessor:
         return JWTGeneralTokenProcessor(
-            secret=JWTSecret(self.configs.jwt.secret),
-            algorithm=JWTAlgorithm(self.configs.jwt.algorithm),
+            secret=JWTSecret(configs.jwt.secret),
+            algorithm=JWTAlgorithm(configs.jwt.algorithm),
         )
 
-    @provide
+    @provide(scope=Scope.APP)
     def provide_jwt_access_processor(
-        self, jwt_general: JWTGeneralTokenProcessor
+        self, jwt_general: JWTGeneralTokenProcessor, configs: AllConfigs
     ) -> JWTAccessTokenProcessor:
         return JWTAccessTokenProcessor(
-            expire_minutes=self.configs.jwt.access_expire_minutes,
-            token_type=self.configs.jwt.access_token_type,
+            expire_minutes=configs.jwt.access_expire_minutes,
+            token_type=configs.jwt.access_token_type,
             jwt_general=jwt_general,
         )
 
-    @provide
+    @provide(scope=Scope.APP)
     def provide_jwt_refresh_processor(
-        self, jwt_general: JWTGeneralTokenProcessor
+        self, jwt_general: JWTGeneralTokenProcessor, configs: AllConfigs
     ) -> JWTRefreshTokenProcessor:
         return JWTRefreshTokenProcessor(
-            expire_days=self.configs.jwt.refresh_expire_days,
-            token_type=self.configs.jwt.refresh_token_type,
+            expire_days=configs.jwt.refresh_expire_days,
+            token_type=configs.jwt.refresh_token_type,
             jwt_general=jwt_general,
         )
 
-    @provide
+    @provide(scope=Scope.APP)
     def provide_jwt_processor(
         self,
         access_token_processor: JWTAccessTokenProcessor,

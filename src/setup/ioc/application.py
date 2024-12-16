@@ -16,7 +16,7 @@ class ApplicationProvider(Provider):
         scope=Scope.REQUEST,
     )
     user_registration_usecase = provide(
-        source=RegistrationUseCase,
+        RegistrationUseCase,
         scope=Scope.REQUEST,
     )
     user_confirmation_usecase = provide(
