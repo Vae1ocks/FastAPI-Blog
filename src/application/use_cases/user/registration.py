@@ -5,17 +5,17 @@ from application.dto.user.user_read import UserReadDTO
 from application.mappers.user.user_to_dto import UserToDTOMapper
 from application.dto.user.user_create import UserCreateDTO
 from application.processors.code_generator import RandomCodeGenerator
+from application.processors.email_sender import MailSender
 from application.services.user.user_registration import UserRegistrationService
 from application.uow import UnitOfWork
 from domain.entities.user.models import User
-from infrastructure.processors.email_sender import EmailSender
 
 
 @dataclass
 class RegistrationUseCase:
     registration_service: UserRegistrationService
     code_generator: RandomCodeGenerator
-    email_sender: EmailSender
+    mail_sender: MailSender
     uow: UnitOfWork
 
     async def execute(self, dto: UserCreateDTO) -> tuple[UserReadDTO, int]:
@@ -25,8 +25,8 @@ class RegistrationUseCase:
             )
             code = self.code_generator()
             message = f"Your confirmation code to process the registration: {code}"
-            self.email_sender.send(
-                emails=[user.email],
+            self.mail_sender.send(
+                targets=[user.email],
                 subject="Confirmation code",
                 message=message,
             )

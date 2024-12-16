@@ -1,4 +1,5 @@
-from dependency_injector.wiring import Provide, inject
+from dishka import FromDishka
+from dishka.integrations.fastapi import inject
 from fastapi import APIRouter, Form, status, UploadFile, Depends, HTTPException, Body
 from fastapi.requests import Request
 from pydantic import EmailStr
@@ -10,7 +11,7 @@ from api.v1.schemes.user.user_read import UserReadScheme
 from application.dto.other.int_code import ConfirmationCodesDTO
 from application.dto.user.user_create import UserCreateDTO
 from application.dto.user.user_read import UserReadDTO
-from setup.di_containers.main import MainContainer
+from application.use_cases.user.registration import RegistrationConfirmationUseCase, RegistrationUseCase
 
 router = APIRouter(prefix="/reg", tags=["Registration"])
 
@@ -18,14 +19,12 @@ router = APIRouter(prefix="/reg", tags=["Registration"])
 @router.post("/user-data", status_code=status.HTTP_201_CREATED)
 @inject
 async def user_data_input(
+    registration_usecase: FromDishka[RegistrationUseCase],
     request: Request,
     username: str = Form(),
     email: EmailStr = Form(),
     password: str = Form(),
     image: UploadFile | None = None,
-    registration_usecase=Depends(
-        Provide[MainContainer.application_container.user_registration_usecase]
-    ),
 ):
     request_scheme = UserCreateScheme(
         image=image.file if image else None,
@@ -49,15 +48,13 @@ async def user_data_input(
 @inject
 async def confirmation_registration(
     request: Request,
-    code:int = Body(embed=True),
-    confirmation_use_case=Depends(
-        Provide[MainContainer.application_container.user_confirmation_usecase]
-    ),
+    code: int = Body(embed=True),
+    confirmation_use_case=FromDishka[RegistrationConfirmationUseCase],
 ) -> UserReadScheme:
     session_not_provided_error = HTTPException(
-            status.HTTP_400_BAD_REQUEST,
-            "Registration credentials not provided",
-        )
+        status.HTTP_400_BAD_REQUEST,
+        "Registration credentials not provided",
+    )
 
     reg_data = request.session.get("registration")
     if not reg_data:

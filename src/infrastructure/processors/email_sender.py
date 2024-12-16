@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from application.processors.email_sender import MailSender
 from infrastructure.celery.tasks import send_email
 
+
 @dataclass(frozen=True)
 class EmailSender(MailSender):
     host: str
@@ -10,14 +11,13 @@ class EmailSender(MailSender):
     host_password: str
     port: int
 
-
-    def send(self, emails: list[str], subject: str, message: str) -> str:
+    def send(self, targets: list[str], subject: str, message: str) -> str:
         task = send_email.delay(
             host=self.host,
             host_user=self.host_user,
             host_password=self.host_password,
             port=self.port,
-            emails=emails,
+            emails=targets,
             subject=subject,
             message=message,
         )
