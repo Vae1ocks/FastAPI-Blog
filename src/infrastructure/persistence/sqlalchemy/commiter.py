@@ -9,3 +9,6 @@ class SqlaCommiter(Commiter):
 
     async def commit(self) -> None:
         await self.session.commit()
+
+    async def flush(self) -> None:
+        await self.session.flush()

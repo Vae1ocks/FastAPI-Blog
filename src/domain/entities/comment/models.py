@@ -7,7 +7,7 @@ from .value_objects import CommentBody
 
 if TYPE_CHECKING:
     from ..article.models import ArticleId
-    from ..user.models import UserId
+    from ..user.models import UserId, User
 
 CommentId = NewType("CommentId", int)
 
@@ -22,3 +22,4 @@ class Comment:
     updated_at: datetime
     article_id: "ArticleId"
     author_id: "UserId"
+    author: "User"

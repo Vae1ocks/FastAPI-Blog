@@ -12,7 +12,7 @@ def send_email(
     subject: str,
     message: str,
 ):
-    msg = f'Subject: {subject}\n\n'
+    msg = f"Subject: {subject}\n\n"
     msg += message
 
     with smtplib.SMTP(host, port) as server:
@@ -22,5 +22,5 @@ def send_email(
             server.sendmail(host_user, emails, msg)
         except smtplib.SMTPRecipientsRefused:
             pass
-        except Exception as e: # noqa
-            ... # TODO: Logging
+        except Exception as e:  # noqa
+            ...  # TODO: Logging

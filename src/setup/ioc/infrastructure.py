@@ -4,6 +4,7 @@ from application.processors.code_generator import RandomCodeGenerator
 from application.processors.email_sender import MailSender
 from application.processors.file_operators import ImageChecker, ImageLoader
 from application.processors.password_hasher import PasswordHasher
+from domain.repositories.user_repository import UserRepository
 from infrastructure.processors.code_generator import RandomIntegerCodeGenerator
 from infrastructure.processors.email_sender import EmailSender
 from infrastructure.processors.file_operators import (
@@ -16,11 +17,18 @@ from infrastructure.processors.jwt_processor import (
     JWTRefreshTokenProcessor, JWTTokenProcessor,
 )
 from infrastructure.processors.password_hasher_bcrypt import BcryptPasswordHasher
+from infrastructure.repositories.sqlalchemy.user_repository import UserRepositoryImpl
 from infrastructure.types import PasswordPepper, JWTAlgorithm, JWTSecret
 from setup.configs import AllConfigs
 
 
 class InfrastructureProvider(Provider):
+    user_repository = provide(
+        source=UserRepositoryImpl,
+        provides=UserRepository,
+        scope=Scope.REQUEST,
+    )
+
     @provide(scope=Scope.APP)
     def provide_password_pepper(self, configs: AllConfigs) -> PasswordPepper:
         return PasswordPepper(configs.pepper.pepper)
@@ -28,7 +36,7 @@ class InfrastructureProvider(Provider):
     password_hasher = provide(
         source=BcryptPasswordHasher,
         provides=PasswordHasher,
-        scope=Scope.APP
+        scope=Scope.APP,
     )
 
     image_checker = provide(
@@ -64,7 +72,7 @@ class InfrastructureProvider(Provider):
     def provide_jwt_general_processor(self, configs: AllConfigs) -> JWTGeneralTokenProcessor:
         return JWTGeneralTokenProcessor(
             secret=JWTSecret(configs.jwt.secret),
-            algorithm=JWTAlgorithm(configs.jwt.algorithm),
+            algorithm=configs.jwt.algorithm,
         )
 
     @provide(scope=Scope.APP)

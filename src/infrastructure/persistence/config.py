@@ -8,7 +8,7 @@ BASE_DIR = Path(__file__).parent.parent.parent.parent
 
 class DatabaseConfig(BaseSettingsConfig):
     @property
-    def url(self) -> PostgresDsn:
+    def url(self) -> str:
         return (
             f"postgresql+asyncpg://{self.user}:{self.password}"
             f"@{self.host}:{self.port}/{self.name}"

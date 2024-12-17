@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from typing import BinaryIO
 
+from application.commiter import Commiter
 from application.dto.other.int_code import ConfirmationCodesDTO
 from application.errors.common.code_mismatch import CodeMismatchError
 from application.errors.user import (
@@ -8,24 +9,25 @@ from application.errors.user import (
     UserUsernameAlreadyExistsError,
     UserEmailAlreadyExistsError,
 )
-from application.uow import UnitOfWork
 from application.dto.user.user_create import UserCreateDTO
 from application.processors.file_operators import ImageChecker, ImageLoader
 from application.processors.password_hasher import PasswordHasher
-from domain.entities.user.models import User
+from domain.entities.user.models import User, UserId
+from domain.repositories.user_repository import UserRepository
 
 
 @dataclass
 class UserRegistrationService:
+    user_repository: UserRepository
     password_hasher: PasswordHasher
     image_checker: ImageChecker
     image_loader: ImageLoader
+    commiter: Commiter
 
-    async def register_unconfirmed(self, uow: UnitOfWork, data: UserCreateDTO) -> User:
+    async def register_unconfirmed(self, data: UserCreateDTO) -> User:
         user: User | None = await self._validate_unique_email_and_username(
             username=data.username,
             email=data.email,
-            uow=uow,
         )
 
         hashed_password: str = self.password_hasher.hash(
@@ -43,23 +45,23 @@ class UserRegistrationService:
                 password=hashed_password,
                 image_path=image_path,
             )
-            uow.user_repository.add(user)
-            await uow.flush()
+            self.user_repository.add(user)
+            await self.commiter.flush()
         return user
 
-    async def confirm_user(self, uow: UnitOfWork, data: ConfirmationCodesDTO):  # noqa
+    async def confirm_user(self, data: ConfirmationCodesDTO):  # noqa
         if data.expected_code != data.provided_code:
             raise CodeMismatchError()
 
-        user: User = await uow.user_repository.get_by_id(user_id=data.user_id)
+        user: User = await self.user_repository.get_by_id(user_id=UserId(data.user_id))
         user.confirm_registration()
-        uow.user_repository.add(user)
+        self.user_repository.add(user)
         return user
 
     async def _validate_unique_email_and_username(  # noqa
-        self, uow: UnitOfWork, username: str, email: str
+        self, username: str, email: str
     ) -> User | None:
-        existing_users = await uow.user_repository.get_by_email_or_username(
+        existing_users = await self.user_repository.get_by_email_or_username(
             username=username, email=email
         )
         if not existing_users:

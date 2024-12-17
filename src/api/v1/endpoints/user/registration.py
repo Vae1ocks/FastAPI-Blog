@@ -19,8 +19,8 @@ router = APIRouter(prefix="/reg", tags=["Registration"])
 @router.post("/user-data", status_code=status.HTTP_201_CREATED)
 @inject
 async def user_data_input(
-    registration_usecase: FromDishka[RegistrationUseCase],
     request: Request,
+    registration_usecase: FromDishka[RegistrationUseCase],
     username: str = Form(),
     email: EmailStr = Form(),
     password: str = Form(),
@@ -48,8 +48,8 @@ async def user_data_input(
 @inject
 async def confirmation_registration(
     request: Request,
+    confirmation_use_case: FromDishka[RegistrationConfirmationUseCase],
     code: int = Body(embed=True),
-    confirmation_use_case=FromDishka[RegistrationConfirmationUseCase],
 ) -> UserReadScheme:
     session_not_provided_error = HTTPException(
         status.HTTP_400_BAD_REQUEST,
