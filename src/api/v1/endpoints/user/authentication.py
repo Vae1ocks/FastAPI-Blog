@@ -5,7 +5,6 @@ from fastapi import APIRouter, Request
 from api.v1.mappers.user.scheme_to_dto import UserSchemeToDTOMapper
 from api.v1.schemes.user.login import LoginScheme
 from application.use_cases.user.login import LoginUseCase
-from setup.di_containers.main import MainContainer
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
