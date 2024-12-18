@@ -51,6 +51,7 @@ class JWTConfig(BaseSettingsConfig):
     access_token_type: str = "access"
     refresh_expire_days: int = 30
     refresh_token_type: str = "refresh"
+    scheme: str = "Bearer"
 
     class Config:
         env_prefix = "JWT_"

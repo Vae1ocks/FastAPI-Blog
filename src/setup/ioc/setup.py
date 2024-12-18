@@ -5,20 +5,20 @@ from dishka import Provider, AsyncContainer, make_async_container
 from setup.configs import AllConfigs
 from setup.ioc.application import ApplicationProvider
 from setup.ioc.db import DatabaseProvider
-from setup.ioc.infrastructure import InfrastructureProvider
+from setup.ioc.infrastructure import InfrastructureProvider, InfrastructureRequestContextProvider
 from setup.ioc.settings import ConfigProvider
 
 
 def get_providers() -> Iterable[Provider]:
     db = (DatabaseProvider(),)
-    infrastructure = (InfrastructureProvider(),)
+    infrastructure = (InfrastructureProvider(), InfrastructureRequestContextProvider())
     application = (ApplicationProvider(),)
 
     return (
         *(ConfigProvider(),),
         *db,
         *infrastructure,
-        *application
+        *application,
     )
 
 

@@ -1,10 +1,8 @@
 from dataclasses import dataclass
 from datetime import datetime, timedelta, UTC
-
 import jwt
-from jwt import ExpiredSignatureError, InvalidTokenError
 
-from application.errors.user import AuthorizationError, AuthenticationError, TokenInvalid
+from application.errors.user import TokenInvalid
 from infrastructure.types import JWTSecret, JWTAlgorithm
 
 
@@ -20,9 +18,9 @@ class JWTGeneralTokenProcessor:
     def decode_jwt(self, token: str | bytes) -> dict:
         try:
             decoded = jwt.decode(token, self.secret, algorithms=[self.algorithm])
-        except ExpiredSignatureError:
+        except jwt.ExpiredSignatureError:
             raise TokenInvalid("Token invalid")
-        except InvalidTokenError:
+        except jwt.InvalidTokenError:
             raise TokenInvalid("Token invalid")
         return decoded
 
@@ -65,7 +63,6 @@ class JWTRefreshTokenProcessor:
         if decoded["type"] != self.token_type:
             raise TokenInvalid("Token invalid")
         return decoded
-
 
 
 @dataclass
