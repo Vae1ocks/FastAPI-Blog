@@ -1,6 +1,6 @@
 from dishka import FromDishka
 from dishka.integrations.fastapi import inject
-from fastapi import APIRouter, Form, status, UploadFile, Depends, HTTPException, Body
+from fastapi import APIRouter, Form, status, UploadFile, HTTPException, Body
 from fastapi.requests import Request
 from pydantic import EmailStr
 

@@ -5,7 +5,9 @@ from domain.entities.user.models import User, UserId
 
 
 def add_is_conf_is_active_to_stmt(
-    stmt: Select, is_active: bool, is_confirmed: bool
+    stmt: Select,
+    is_active: bool,
+    is_confirmed: bool,
 ):
     if is_active is not None:
         stmt = stmt.where(User.is_active == is_active)  # type: ignore
