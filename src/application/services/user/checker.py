@@ -10,6 +10,6 @@ class UserCheckerService:
     user_repository: UserRepository
     commiter: Commiter
 
-    async def check_existence_by_id(self, user_id: int) -> bool:
-        user = await self.user_repository.get_by_id(user_id=UserId(user_id))
-        return True if user else False
+    async def check_existence_and_activation_by_id(self, user_id: UserId) -> bool:
+        user = await self.user_repository.get_by_id(user_id=user_id)
+        return True if user and user.is_active else False
