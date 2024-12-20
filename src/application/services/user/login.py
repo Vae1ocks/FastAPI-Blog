@@ -3,7 +3,6 @@ from dataclasses import dataclass
 from application.commiter import Commiter
 from application.dto.user.login import LoginUsernamePasswordDTO
 from application.errors.user import (
-    AlreadyAuthenticatedError,
     AuthorizationError,
     AuthenticationError,
 )
