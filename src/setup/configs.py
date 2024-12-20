@@ -1,3 +1,4 @@
+from enum import StrEnum
 from pathlib import Path
 
 from infrastructure.celery.config import RedisConfig, SMTPConfig, CeleryConfig
@@ -26,19 +27,36 @@ class UvicornConfig(BaseSettingsConfig):
         env_prefix = "UVICORN_"
 
 
+class LogLevelsEnum(StrEnum):
+    DEBUG = "DEBUG"
+    INFO = "INFO"
+    WARNING = "WARNING"
+    ERROR = "ERROR"
+    CRITICAL = "CRITICAL"
+
+
+class LoggingConfig(BaseSettingsConfig):
+    level: LogLevelsEnum
+
+    class Config:
+        env_file = f"{BASE_DIR}/.env"
+        env_prefix = "LOGGING_"
+
+
 class AllConfigs(BaseSettingsConfig):
-    db: DatabaseConfig = DatabaseConfig()
-    sqla_eng: SqlaEngineConfig = SqlaEngineConfig()
-    sqla_sess: SqlaSessionConfig = SqlaSessionConfig()
-    redis: RedisConfig = RedisConfig()
-    smtp: SMTPConfig = SMTPConfig()
-    file: FileConfig = FileConfig()
-    pepper: PepperConfig = PepperConfig()
-    code_generator: CodeGeneratorConfig = CodeGeneratorConfig()
-    celery: CeleryConfig = CeleryConfig()
-    session: SessionConfig = SessionConfig()
-    uvicorn: UvicornConfig = UvicornConfig()
-    jwt: JWTConfig = JWTConfig()
+    db: DatabaseConfig = DatabaseConfig()  # noqa
+    sqla_eng: SqlaEngineConfig = SqlaEngineConfig()  # noqa
+    sqla_sess: SqlaSessionConfig = SqlaSessionConfig()  # noqa
+    redis: RedisConfig = RedisConfig()  # noqa
+    smtp: SMTPConfig = SMTPConfig()  # noqa
+    file: FileConfig = FileConfig()  # noqa
+    pepper: PepperConfig = PepperConfig()  # noqa
+    code_generator: CodeGeneratorConfig = CodeGeneratorConfig()  # noqa
+    celery: CeleryConfig = CeleryConfig()  # noqa
+    session: SessionConfig = SessionConfig()  # noqa
+    uvicorn: UvicornConfig = UvicornConfig()  # noqa
+    jwt: JWTConfig = JWTConfig()  # noqa
+    logging: LoggingConfig = LoggingConfig()  # noqa
 
 
 configs = AllConfigs()

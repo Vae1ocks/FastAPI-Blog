@@ -6,9 +6,12 @@ from fastapi import FastAPI
 from setup.app_factory import create_app
 from setup.configs import configs as all_configs, AllConfigs
 from setup.ioc.setup import create_async_ioc_container, get_providers
+from setup.logger import configure_logging
 
 
 def make_app(configs: AllConfigs = all_configs) -> FastAPI:
+    configure_logging(level=configs.logging.level)
+
     app: FastAPI = create_app(configs=configs)
     async_ioc_container: AsyncContainer = create_async_ioc_container(
         providers=get_providers(),

@@ -1,7 +1,6 @@
 from contextlib import asynccontextmanager
 from typing import AsyncIterator
 
-from dishka import AsyncContainer
 from fastapi import FastAPI
 from starlette.middleware.sessions import SessionMiddleware
 
@@ -9,11 +8,6 @@ from api.v1.exception_handler import ExceptionMessageProvider, ExceptionMapper, 
 from api.v1.include_routers import include_routers
 from infrastructure.persistence.sqlalchemy.models import map_tables
 from setup.configs import AllConfigs
-
-
-# from setup.di_containers.main import MainContainer
-# from setup.di_containers.setup import setup_container
-# from .ioc.setup import create_async_ioc_container, get_providers
 
 
 @asynccontextmanager
