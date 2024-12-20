@@ -1,12 +1,13 @@
 from dataclasses import dataclass
 
 from application.errors.user import AuthenticationError
+from application.ports.user.identity_provider import IdentityProvider
 from domain.entities.user.models import UserId
 from infrastructure.managers.jwt import JWTTokenManager
 
 
 @dataclass
-class JWTIdentityProvider:
+class JWTIdentityProvider(IdentityProvider):
     jwt_token_manager: JWTTokenManager
 
     def get_current_user_id(self) -> UserId:

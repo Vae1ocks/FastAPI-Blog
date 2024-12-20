@@ -4,6 +4,7 @@ from fastapi import Request
 from api.v1.endpoints.adapters.request_context.headers_access_jwt_request_handler import (
     HeadersAccessJWTTokenRequestHandler,
 )
+from application.ports.user.identity_provider import IdentityProvider
 from application.processors.code_generator import RandomCodeGenerator
 from application.processors.email_sender import MailSender
 from application.processors.file_operators import ImageChecker, ImageLoader
@@ -12,6 +13,9 @@ from domain.repositories.user_repository import UserRepository
 from infrastructure.managers.jwt import JWTTokenManager
 from infrastructure.ports.request_context.access_jwt_request_handler import (
     AccessJWTTokenRequestHandler,
+)
+from infrastructure.ports.request_context.jwt_identity_provider import (
+    JWTIdentityProvider,
 )
 from infrastructure.processors.code_generator import RandomIntegerCodeGenerator
 from infrastructure.processors.email_sender import EmailSender
@@ -29,6 +33,25 @@ from infrastructure.processors.password_hasher_bcrypt import BcryptPasswordHashe
 from infrastructure.repositories.sqlalchemy.user_repository import UserRepositoryImpl
 from infrastructure.types import PasswordPepper, JWTAlgorithm, JWTSecret, JWTAuthScheme
 from setup.configs import AllConfigs
+
+
+class InfrastructureRequestContextProvider(Provider):
+    scope = Scope.REQUEST
+
+    router = from_context(provides=Request)
+
+    @provide(provides=JWTAuthScheme, scope=Scope.APP)
+    def provide_jwt_auth_scheme(self, configs: AllConfigs) -> JWTAuthScheme:
+        return JWTAuthScheme(configs.jwt.scheme)
+
+    access_jwt_token_request_handler = provide(
+        source=HeadersAccessJWTTokenRequestHandler,
+        provides=AccessJWTTokenRequestHandler,
+    )
+
+    jwt_token_manager = provide(
+        source=JWTTokenManager,
+    )
 
 
 class InfrastructureProvider(Provider):
@@ -104,32 +127,13 @@ class InfrastructureProvider(Provider):
             jwt_general=jwt_general,
         )
 
-    @provide(scope=Scope.APP)
-    def provide_jwt_processor(
-        self,
-        access_token_processor: JWTAccessTokenProcessor,
-        refresh_token_processor: JWTRefreshTokenProcessor,
-    ) -> JWTTokenProcessor:
-        return JWTTokenProcessor(
-            access_token_processor=access_token_processor,
-            refresh_token_processor=refresh_token_processor,
-        )
-
-
-class InfrastructureRequestContextProvider(Provider):
-    scope = Scope.REQUEST
-
-    router = from_context(provides=Request)
-
-    @provide(provides=JWTAuthScheme, scope=Scope.APP)
-    def provide_jwt_auth_scheme(self, configs: AllConfigs) -> JWTAuthScheme:
-        return JWTAuthScheme(configs.jwt.scheme)
-
-    access_jwt_token_request_handler = provide(
-        source=HeadersAccessJWTTokenRequestHandler,
-        provides=AccessJWTTokenRequestHandler,
+    jwt_token_processor = provide(
+        source=JWTTokenProcessor,
+        scope=Scope.APP,
     )
 
-    jwt_token_manager = provide(
-        source=JWTTokenManager,
+    identity_provider = provide(
+        source=JWTIdentityProvider,
+        provides=IdentityProvider,
+        scope=Scope.REQUEST,
     )
