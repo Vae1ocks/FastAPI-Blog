@@ -8,7 +8,6 @@ from application.errors.user import (
     AlreadyAuthenticatedError,
 )
 from application.ports.user.identity_provider import IdentityProvider
-from application.services.jwt.token_validation import TokenValidationService
 from application.services.user.checker import UserCheckerService
 from application.services.user.login import LoginUsernamePasswordService
 from domain.entities.user.models import UserId
@@ -21,7 +20,6 @@ class LoginUseCase:
     identity_provider: IdentityProvider
     user_checker_service: UserCheckerService
     login_service: LoginUsernamePasswordService
-    token_validation_service: TokenValidationService
 
     async def execute(self, dto: LoginUsernamePasswordDTO):
         try:

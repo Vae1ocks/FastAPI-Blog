@@ -1,7 +1,6 @@
 from dishka import Provider, provide, Scope
 
 from application.commiter import Commiter
-from application.services.jwt.token_validation import TokenValidationService
 from application.services.user.checker import UserCheckerService
 from application.services.user.login import LoginUsernamePasswordService
 from application.services.user.user_registration import UserRegistrationService
@@ -27,9 +26,6 @@ class ApplicationProvider(Provider):
     )
     user_checker_service = provide(
         source=UserCheckerService,
-    )
-    token_validation_service = provide(
-        TokenValidationService,
     )
     login_service = provide(
         LoginUsernamePasswordService,
