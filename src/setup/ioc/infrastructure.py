@@ -9,6 +9,7 @@ from application.processors.code_generator import RandomCodeGenerator
 from application.processors.email_sender import MailSender
 from application.processors.file_operators import ImageChecker, ImageLoader
 from application.processors.password_hasher import PasswordHasher
+from domain.repositories.article_repository import ArticleRepository
 from domain.repositories.user_repository import UserRepository
 from infrastructure.managers.jwt import JWTTokenManager
 from infrastructure.ports.request_context.access_jwt_request_handler import (
@@ -30,6 +31,9 @@ from infrastructure.processors.jwt_processor import (
     JWTTokenProcessor,
 )
 from infrastructure.processors.password_hasher_bcrypt import BcryptPasswordHasher
+from infrastructure.repositories.sqlalchemy.article_repository import (
+    ArticleRepositoryImpl,
+)
 from infrastructure.repositories.sqlalchemy.user_repository import UserRepositoryImpl
 from infrastructure.types import PasswordPepper, JWTAlgorithm, JWTSecret, JWTAuthScheme
 from setup.configs import AllConfigs
@@ -135,5 +139,11 @@ class InfrastructureProvider(Provider):
     identity_provider = provide(
         source=JWTIdentityProvider,
         provides=IdentityProvider,
+        scope=Scope.REQUEST,
+    )
+
+    article_repository = provide(
+        source=ArticleRepositoryImpl,
+        provides=ArticleRepository,
         scope=Scope.REQUEST,
     )

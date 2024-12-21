@@ -1,5 +1,6 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import joinedload
 
 from domain.entities.article.models import Article, ArticleId, ArticleStatus
 
@@ -14,7 +15,12 @@ class ArticleRepositoryImpl:
         return list(result.all())
 
     async def get_by_id(self, article_id: ArticleId) -> Article | None:
-        stmt = select(Article).where(Article.id == article_id)
+        stmt = (
+            select(Article)
+            .where(Article.id == article_id)  # noqa
+            .where(Article.id == article_id)
+            .options(joinedload(Article.comments), joinedload(Article.author))  # noqa
+        )
         return (await self.session.execute(stmt)).scalar_one_or_none()
 
     async def get_by_status(

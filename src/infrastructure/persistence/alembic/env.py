@@ -18,7 +18,7 @@ from infrastructure.persistence.sqlalchemy.models import mapper_registry, map_ta
 config = context.config
 
 
-config.set_main_option("sqlalchemy.url", db_config.db.url)
+config.set_main_option("sqlalchemy.url", db_config.url)
 
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
