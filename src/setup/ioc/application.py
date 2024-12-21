@@ -1,10 +1,11 @@
 from dishka import Provider, provide, Scope
 
 from application.commiter import Commiter
+from application.services.jwt.refresh import RefreshTokenService
 from application.services.user.checker import UserCheckerService
 from application.services.user.login import LoginUsernamePasswordService
 from application.services.user.user_registration import UserRegistrationService
-from application.use_cases.user.login import LoginUseCase
+from application.use_cases.user.login import LoginUseCase, RefreshUseCase
 from application.use_cases.user.registration import (
     RegistrationUseCase,
     RegistrationConfirmationUseCase,
@@ -36,4 +37,10 @@ class ApplicationProvider(Provider):
     commiter = provide(
         source=SqlaCommiter,
         provides=Commiter,
+    )
+    refresh_service = provide(
+        source=RefreshTokenService,
+    )
+    refresh_usecase = provide(
+        source=RefreshUseCase,
     )

@@ -97,3 +97,15 @@ class JWTTokenProcessor:
         refresh_token: str = self.refresh_token_processor.encode_jwt(payload=payload)
         logger.debug("Generating refresh and access tokens: finished")
         return {"access": access_token, "refresh": refresh_token}
+
+    def encode_access(self, payload: dict) -> str:
+        return self.access_token_processor.encode_jwt(payload=payload)
+
+    def validate_and_decode_access(self, token: str | bytes) -> dict:
+        return self.access_token_processor.validate_and_decode(token=token)
+
+    def encode_refresh(self, payload: dict) -> str:
+        return self.refresh_token_processor.encode_jwt(payload=payload)
+
+    def validate_and_decode_refresh(self, token: str | bytes) -> dict:
+        return self.refresh_token_processor.validate_and_decode(token=token)

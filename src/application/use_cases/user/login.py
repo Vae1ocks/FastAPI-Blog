@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 import logging
 
+from application.dto.other.jwt import JWTRefreshDTO, JWTTokenDTO
 from application.dto.user.login import LoginUsernamePasswordDTO
 from application.errors.user import (
     AuthenticationError,
@@ -8,6 +9,7 @@ from application.errors.user import (
     AlreadyAuthenticatedError,
 )
 from application.ports.user.identity_provider import IdentityProvider
+from application.services.jwt.refresh import RefreshTokenService
 from application.services.user.checker import UserCheckerService
 from application.services.user.login import LoginUsernamePasswordService
 from domain.entities.user.models import UserId
@@ -41,4 +43,15 @@ class LoginUseCase:
             logger.debug("Authentication error, pass")
         tokens: dict = await self.login_service(dto=dto)
         logger.debug("Exiting from LoginUseCase")
+        return tokens
+
+
+@dataclass
+class RefreshUseCase:
+    refresh_service: RefreshTokenService
+
+    async def execute(self, dto: JWTRefreshDTO) -> JWTTokenDTO:
+        logger.debug("RefreshUseCase.execute: started")
+        tokens: JWTTokenDTO = await self.refresh_service(dto=dto)
+        logger.debug("RefreshUseCase.execute: finished")
         return tokens

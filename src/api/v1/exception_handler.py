@@ -23,7 +23,7 @@ from application.errors.user import (
     UserEmailAlreadyExistsError,
     UserUsernameAlreadyExistsError,
     UserEmailNotFoundError,
-    UserUsernameNotFoundError,
+    UserUsernameNotFoundError, TokenInvalid,
 )
 from domain.entities.common.errors import DomainError
 from domain.entities.user.errors import UserAlreadyActiveError, UserAlreadyConfirmedError, UserAlreadyDeactivatedError
@@ -55,6 +55,7 @@ class ExceptionMapper:
             CodeMismatchError: status.HTTP_400_BAD_REQUEST,
             AuthenticationError: status.HTTP_401_UNAUTHORIZED,
             AlreadyAuthenticatedError: status.HTTP_401_UNAUTHORIZED,
+            TokenInvalid: status.HTTP_401_UNAUTHORIZED,
             AuthorizationError: status.HTTP_403_FORBIDDEN,
             UserUsernameEmailAlreadyExistsError: status.HTTP_409_CONFLICT,
             UserUsernameAlreadyExistsError: status.HTTP_409_CONFLICT,
