@@ -6,7 +6,7 @@ from domain.entities.user.models import UserId
 
 @dataclass(frozen=True, slots=True)
 class ArticleCreateDTO:
-    author_id: UserId
+    author_id: UserId | None
     title: ArticleTitle
     body: ArticleBody
     status: ArticleStatus

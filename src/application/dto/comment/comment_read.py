@@ -5,7 +5,7 @@ from ..user.user_read import UserListDTO
 
 
 @dataclass(frozen=True, slots=True)
-class CommentListDTO:
+class CommentReadDTO:
     id: int
     body: str
     author: UserListDTO

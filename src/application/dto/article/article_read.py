@@ -3,7 +3,7 @@ from datetime import datetime
 
 from domain.entities.article.models import ArticleStatus
 from ..user.user_read import UserListDTO
-from ..comment.comment_read import CommentListDTO
+from ..comment.comment_read import CommentReadDTO
 
 
 @dataclass(frozen=True, slots=True)
@@ -15,7 +15,7 @@ class ArticleReadDTO:
     created_at: datetime
     updated_at: datetime
     author: UserListDTO
-    comments: list[CommentListDTO]
+    comments: list[CommentReadDTO]
 
 
 @dataclass(frozen=True, slots=True)
