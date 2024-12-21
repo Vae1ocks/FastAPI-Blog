@@ -2,8 +2,9 @@ from functools import partial
 from datetime import datetime, UTC
 
 import sqlalchemy as sa
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, composite
 
+from domain.entities.comment.value_objects import CommentBody
 from .base import mapper_registry
 from domain.entities.comment.models import Comment
 
@@ -20,7 +21,7 @@ comments_table = sa.Table(
         unique=True,
     ),
     sa.Column(
-        "body",
+        "comment_body",
         sa.Text,
     ),
     sa.Column(
@@ -59,6 +60,8 @@ def map_comments_table() -> None:
             "author": relationship(
                 "User",
                 back_populates="comments",
-            )
-        }
+            ),
+
+            "body": composite(CommentBody, comments_table.c.comment_body),
+        },
     )

@@ -15,9 +15,13 @@ ArticleId = NewType("ArticleId", int)
 UTC_NOW = partial(datetime.now, UTC)
 
 
+@dataclass(kw_only=True)
 class ArticleStatus(StrEnum):
     draft = auto()
     published = auto()
+
+    def __hash__(self):
+        return hash(self.value)
 
 
 @dataclass(kw_only=True)

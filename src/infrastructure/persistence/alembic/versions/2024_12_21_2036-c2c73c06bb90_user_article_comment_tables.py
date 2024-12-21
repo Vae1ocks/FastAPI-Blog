@@ -1,8 +1,8 @@
-"""Users, comments, articles tables
+"""User, article, comment tables
 
-Revision ID: 0872521f0690
+Revision ID: c2c73c06bb90
 Revises: 
-Create Date: 2024-11-22 17:41:04.772581
+Create Date: 2024-12-21 20:36:29.243115
 
 """
 
@@ -13,7 +13,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = "0872521f0690"
+revision: str = "c2c73c06bb90"
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -58,9 +58,13 @@ def upgrade() -> None:
     op.create_table(
         "articles",
         sa.Column("id", sa.BigInteger(), nullable=False),
-        sa.Column("title", sa.String(length=150), nullable=True),
-        sa.Column("body", sa.Text(), nullable=True),
-        sa.Column("status", sa.String(), nullable=True),
+        sa.Column("article_title", sa.String(length=150), nullable=True),
+        sa.Column("article_body", sa.Text(), nullable=True),
+        sa.Column(
+            "article_status",
+            sa.Enum("draft", "published", name="articlestatus"),
+            nullable=True,
+        ),
         sa.Column(
             "created_at",
             sa.DateTime(),
@@ -80,7 +84,7 @@ def upgrade() -> None:
     op.create_table(
         "comments",
         sa.Column("id", sa.BigInteger(), nullable=False),
-        sa.Column("body", sa.Text(), nullable=True),
+        sa.Column("comment_body", sa.Text(), nullable=True),
         sa.Column(
             "created_at",
             sa.DateTime(),

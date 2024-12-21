@@ -4,7 +4,6 @@ from sqlalchemy.orm import relationship
 from .base import mapper_registry
 from domain.entities.user.models import User
 
-
 users_table = sa.Table(
     "users",
     mapper_registry.metadata,
@@ -47,6 +46,7 @@ users_table = sa.Table(
         server_default=sa.false(),
     ),
 )
+
 
 def map_users_table() -> None:
     mapper_registry.map_imperatively(

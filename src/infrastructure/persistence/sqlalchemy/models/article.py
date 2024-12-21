@@ -3,17 +3,13 @@ from functools import partial
 from datetime import datetime, UTC
 
 import sqlalchemy as sa
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, composite
 
+from domain.entities.article.value_objects import ArticleTitle, ArticleBody
 from .base import mapper_registry
-from domain.entities.article.models import Article
+from domain.entities.article.models import Article, ArticleStatus
 
 UTC_NOW = partial(datetime.now, UTC)
-
-
-class ArticleStatus(Enum):
-    draft = "df"
-    published = "pb"
 
 
 articles_table = sa.Table(
@@ -26,17 +22,17 @@ articles_table = sa.Table(
         unique=True,
     ),
     sa.Column(
-        "title",
+        "article_title",
         sa.String(150),
     ),
     sa.Column(
-        "body",
+        "article_body",
         sa.Text,
     ),
     sa.Column(
-        "status",
-        sa.String,
-        default="draft",
+        "article_status",
+        sa.Enum(ArticleStatus),
+        default=ArticleStatus.draft,
     ),
     sa.Column(
         "created_at",
@@ -69,6 +65,9 @@ def map_articles_table() -> None:
                 "Comment",
                 back_populates="article",
                 cascade="all, delete-orphan",
-            )
+            ),
+            "title": composite(ArticleTitle, articles_table.c.article_title),
+            "body": composite(ArticleBody, articles_table.c.article_body),
+            "status": composite(ArticleStatus, articles_table.c.article_status),
         }
     )
