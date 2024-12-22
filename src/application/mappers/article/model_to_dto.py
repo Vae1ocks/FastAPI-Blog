@@ -7,9 +7,9 @@ from domain.entities.article.models import Article
 class ArticleModelToDTOMapper:
     @staticmethod
     def to_read_dto(model: Article) -> ArticleReadDTO:
-        user_dto = UserToDTOMapper.to_list_dto(user=Article.author)
+        user_dto = UserToDTOMapper.to_list_dto(user=model.author)
         comments_dtos = []
-        for comment in Article.comments:
+        for comment in model.comments:
             comments_dtos.append(CommentToDTOMapper.to_list_dto(comment=comment))
         return ArticleReadDTO(
             id=model.id,

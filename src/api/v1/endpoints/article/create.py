@@ -17,7 +17,7 @@ from ...schemes.article.create import ArticleCreateScheme
 async def article_create(
     data: ArticleCreateScheme,
     create_usecase: FromDishka[ArticleCreateUseCase],
-    token = Depends(http_bearer),
+    token = Depends(http_bearer),  # noqa, for documentation
 ):
     dto: ArticleCreateDTO = ArticleSchemeToDTOMapper.to_create_dto(scheme=data)
     article_read: ArticleReadDTO = await create_usecase.execute(dto=dto)

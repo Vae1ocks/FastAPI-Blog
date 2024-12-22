@@ -12,6 +12,6 @@ class ArticleReadScheme(BaseModel):
     body: str
     status: str
     created_at: datetime
-    updated_at: datetime
+    updated_at: datetime | None
     author: UserListScheme
     comments: list[CommentReadScheme]

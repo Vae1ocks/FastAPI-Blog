@@ -19,13 +19,13 @@ class ArticleService:
         if dto.author_id is None:
             logger.error("ArticleDTO.author_id is None")
             raise DomainFieldError()
-
         article = Article(
             author_id=dto.author_id,
             title=dto.title,
             body=dto.body,
-            status=dto.status,
+            status=dto.status.draft,
         )
         self.article_repository.add(article)
         await self.commiter.commit()
+        article: Article = await self.article_repository.get_by_id(article.id)
         return article

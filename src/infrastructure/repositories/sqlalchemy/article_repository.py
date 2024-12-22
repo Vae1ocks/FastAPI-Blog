@@ -21,7 +21,7 @@ class ArticleRepositoryImpl:
             .where(Article.id == article_id)
             .options(joinedload(Article.comments), joinedload(Article.author))  # noqa
         )
-        return (await self.session.execute(stmt)).scalar_one_or_none()
+        return (await self.session.execute(stmt)).unique().scalar_one_or_none()
 
     async def get_by_status(
         self,
