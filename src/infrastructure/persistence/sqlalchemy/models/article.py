@@ -36,21 +36,20 @@ articles_table = sa.Table(
     ),
     sa.Column(
         "created_at",
-        sa.DateTime,
-        server_default=sa.text("(now() at time zone 'utc')")
+        sa.TIMESTAMP(timezone=True),
+        server_default=sa.text("(now() at time zone 'utc')"),
     ),
     sa.Column(
-        "updated_at",
-        sa.DateTime,
-        default=None,
-        onupdate=UTC_NOW
+        "updated_at", sa.TIMESTAMP(timezone=True), default=None, onupdate=UTC_NOW
     ),
     sa.Column(
         "author_id",
         sa.BigInteger,
-        sa.ForeignKey("users.id")
+        sa.ForeignKey("users.id"),
+        nullable=False,
     ),
 )
+
 
 def map_articles_table() -> None:
     mapper_registry.map_imperatively(
@@ -68,6 +67,5 @@ def map_articles_table() -> None:
             ),
             "title": composite(ArticleTitle, articles_table.c.article_title),
             "body": composite(ArticleBody, articles_table.c.article_body),
-            "status": composite(ArticleStatus, articles_table.c.article_status),
-        }
+        },
     )

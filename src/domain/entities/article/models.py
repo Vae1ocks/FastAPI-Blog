@@ -15,7 +15,7 @@ ArticleId = NewType("ArticleId", int)
 UTC_NOW = partial(datetime.now, UTC)
 
 
-@dataclass(kw_only=True)
+@dataclass
 class ArticleStatus(StrEnum):
     draft = auto()
     published = auto()
@@ -34,5 +34,5 @@ class Article:
     author_id: "UserId"
     comments_id: Optional["CommentId"] = None
     updated_at: datetime | None = None
-    author: Optional["User"] = None
+    author: "User | None" = field(init=False)
     comments: list["Comment"] = field(default_factory=list)
