@@ -30,7 +30,7 @@ articles_table = sa.Table(
         sa.Text,
     ),
     sa.Column(
-        "article_status",
+        "status",
         sa.Enum(ArticleStatus),
         default=ArticleStatus.draft,
     ),

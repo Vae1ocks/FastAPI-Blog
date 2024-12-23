@@ -61,8 +61,8 @@ def upgrade() -> None:
         sa.Column("article_title", sa.String(length=150), nullable=True),
         sa.Column("article_body", sa.Text(), nullable=True),
         sa.Column(
-            "article_status",
-            sa.Enum("draft", "published", name="articlestatus"),
+            "status",
+            sa.Enum("draft", "published", name="status"),
             nullable=True,
         ),
         sa.Column(
