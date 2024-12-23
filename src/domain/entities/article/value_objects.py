@@ -6,9 +6,11 @@ from ..common.exceptions import ShortTitleLengthException, LongTitleLengthExcept
 
 @dataclass(frozen=True)
 class ArticleTitle(BaseValueObject):
-    value: str
+    value: str | None = None
 
     def validate(self):
+        if self.value is None:
+            return
         if len(self.value) < 5:
             raise ShortTitleLengthException(5)
         if len(self.value) > 150:
@@ -16,5 +18,8 @@ class ArticleTitle(BaseValueObject):
 
 
 @dataclass(frozen=True)
-class ArticleBody:
-    value: str
+class ArticleBody(BaseValueObject):
+    value: str | None = None
+
+    def validate(self):
+        pass
