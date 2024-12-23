@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
-class ArticleService:
+class ArticleCreateService:
     article_repository: ArticleRepository
     commiter: Commiter
 
