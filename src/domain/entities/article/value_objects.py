@@ -6,15 +6,15 @@ from ..common.exceptions import ShortTitleLengthException, LongTitleLengthExcept
 
 @dataclass(frozen=True)
 class ArticleTitle(BaseValueObject):
-    title: str
+    value: str
 
     def validate(self):
-        if len(self.title) < 5:
+        if len(self.value) < 5:
             raise ShortTitleLengthException(5)
-        if len(self.title) > 150:
+        if len(self.value) > 150:
             raise LongTitleLengthException(150)
 
 
 @dataclass(frozen=True)
 class ArticleBody:
-    text: str
+    value: str

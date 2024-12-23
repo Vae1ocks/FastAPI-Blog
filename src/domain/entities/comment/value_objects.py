@@ -6,8 +6,8 @@ from ..common.value_objects import BaseValueObject
 
 @dataclass(frozen=True)
 class CommentBody(BaseValueObject):
-    text: str
+    value: str
 
     def validate(self):
-        if len(self.text) > 450:
+        if len(self.value) > 450:
             raise LongTitleLengthException(450)
