@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from datetime import datetime
 
 from domain.entities.article.models import ArticleStatus
+from domain.entities.article.value_objects import ArticleBody, ArticleTitle
 from ..user.user_read import UserListDTO
 from ..comment.comment_read import CommentReadDTO
 
@@ -9,9 +10,9 @@ from ..comment.comment_read import CommentReadDTO
 @dataclass(frozen=True, slots=True)
 class ArticleReadDTO:
     id: int
-    title: str
-    body: str
-    status: str
+    title: ArticleTitle
+    body: ArticleBody
+    status: ArticleStatus
     created_at: datetime
     updated_at: datetime
     author: UserListDTO

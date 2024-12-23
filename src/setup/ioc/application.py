@@ -2,11 +2,13 @@ from dishka import Provider, provide, Scope
 
 from application.commiter import Commiter
 from application.services.article.create import ArticleCreateService
+from application.services.article.update import ArticleUpdateService
 from application.services.jwt.refresh import RefreshTokenService
 from application.services.user.checker import UserCheckerService
 from application.services.user.login import LoginUsernamePasswordService
 from application.services.user.user_registration import UserRegistrationService
 from application.use_cases.article.create import ArticleCreateUseCase
+from application.use_cases.article.update import ArticleUpdateUseCase
 from application.use_cases.user.login import LoginUseCase, RefreshUseCase
 from application.use_cases.user.registration import (
     RegistrationUseCase,
@@ -51,4 +53,10 @@ class ApplicationProvider(Provider):
     )
     article_create_use_case = provide(
         source=ArticleCreateUseCase,
+    )
+    article_update_service = provide(
+        source=ArticleUpdateService,
+    )
+    article_update_use_case = provide(
+        source=ArticleUpdateUseCase,
     )

@@ -23,7 +23,7 @@ class ArticleCreateService:
             author_id=dto.author_id,
             title=dto.title,
             body=dto.body,
-            status=dto.status.draft,
+            status=dto.status,
         )
         self.article_repository.add(article)
         await self.commiter.commit()

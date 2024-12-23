@@ -14,9 +14,9 @@ class ArticleModelToDTOMapper:
         return ArticleReadDTO(
             id=model.id,
             author=user_dto,
-            title=str(model.title),
-            body=str(model.body),
-            status=str(model.status),
+            title=model.title,
+            body=model.body,
+            status=model.status,
             created_at=model.created_at,
             updated_at=model.updated_at,
             comments=comments_dtos,

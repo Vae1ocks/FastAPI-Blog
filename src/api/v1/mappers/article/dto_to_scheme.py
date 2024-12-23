@@ -16,8 +16,8 @@ class ArticleDTOToSchemeMapper:
 
         return ArticleReadScheme(
             id=dto.id,
-            title=dto.title,
-            body=dto.body,
+            title=dto.title.value,
+            body=dto.body.value,
             status=dto.status,
             created_at=dto.created_at,
             updated_at=dto.updated_at,

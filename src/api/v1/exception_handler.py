@@ -10,6 +10,7 @@ from pydantic_core import ErrorDetails
 from application.common.error import ApplicationError
 from application.errors.article import ArticleTitleNotFound
 from application.errors.common.code_mismatch import CodeMismatchError
+from application.errors.common.no_permission import NoPermissionError
 from application.errors.common.validation import (
     ObjectNotExistsError,
     AlreadyExistsError,
@@ -57,6 +58,7 @@ class ExceptionMapper:
             AlreadyAuthenticatedError: status.HTTP_401_UNAUTHORIZED,
             TokenInvalid: status.HTTP_401_UNAUTHORIZED,
             AuthorizationError: status.HTTP_403_FORBIDDEN,
+            NoPermissionError: status.HTTP_403_FORBIDDEN,
             UserUsernameEmailAlreadyExistsError: status.HTTP_409_CONFLICT,
             UserUsernameAlreadyExistsError: status.HTTP_409_CONFLICT,
             UserEmailAlreadyExistsError: status.HTTP_409_CONFLICT,
