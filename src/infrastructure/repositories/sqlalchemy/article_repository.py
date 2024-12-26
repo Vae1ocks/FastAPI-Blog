@@ -37,9 +37,5 @@ class ArticleRepositoryImpl:
     def add(self, article: Article) -> None:
         self.session.add(article)
 
-    async def delete(self, article_id: ArticleId) -> None:
-        stmt = select(Article).where(Article.id == article_id)
-        article = (await self.session.execute(stmt)).scalar_one_or_none()
-        if article is None:
-            raise ValueError(f"Article with id={article_id} does not exist.")
+    async def delete(self, article: Article) -> None:
         await self.session.delete(article)
