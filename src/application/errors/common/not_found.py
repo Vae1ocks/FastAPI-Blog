@@ -4,13 +4,13 @@ from application.common.error import ApplicationError
 
 
 @dataclass(eq=False)
-class NotFoundError(ApplicationError):
+class DoesNotExist(ApplicationError):
     obj_name: str
-    id: str
+    obj_id: int
 
     @property
     def message(self) -> str:
-        return f"The {self.obj_name.capitalize()} with {id=}"
+        return f"The {self.obj_name.capitalize()} with id={self.obj_id} does not exist"
 
     def __str__(self) -> str:
         return self.message

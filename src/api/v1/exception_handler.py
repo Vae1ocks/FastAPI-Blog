@@ -11,8 +11,8 @@ from application.common.error import ApplicationError
 from application.errors.article import ArticleTitleNotFound
 from application.errors.common.code_mismatch import CodeMismatchError
 from application.errors.common.no_permission import NoPermissionError
+from application.errors.common.not_found import DoesNotExist
 from application.errors.common.validation import (
-    ObjectNotExistsError,
     AlreadyExistsError,
     FileNotImageError,
 )
@@ -63,7 +63,7 @@ class ExceptionMapper:
             UserUsernameAlreadyExistsError: status.HTTP_409_CONFLICT,
             UserEmailAlreadyExistsError: status.HTTP_409_CONFLICT,
             AlreadyExistsError: status.HTTP_409_CONFLICT,
-            ObjectNotExistsError: status.HTTP_404_NOT_FOUND,
+            DoesNotExist: status.HTTP_404_NOT_FOUND,
             ArticleTitleNotFound: status.HTTP_404_NOT_FOUND,
             UserEmailNotFoundError: status.HTTP_404_NOT_FOUND,
             UserUsernameNotFoundError: status.HTTP_404_NOT_FOUND,
