@@ -12,7 +12,7 @@ from ...mappers.article.scheme_to_dto import ArticleSchemeToDTOMapper
 from ...schemes.article.update import ArticleUpdateScheme
 
 
-@router.patch("{article_id}")
+@router.patch("/{article_id}")
 @inject
 async def article_update_partial(
     data: ArticleUpdateScheme,

@@ -4,6 +4,7 @@ import logging
 
 from application.commiter import Commiter
 from application.dto.article.article_update import ArticleUpdateDTO
+from application.errors.common.not_found import DoesNotExist
 from domain.entities.article.models import Article
 from domain.entities.common.value_objects import BaseValueObject
 from domain.repositories.article_repository import ArticleRepository
@@ -17,7 +18,10 @@ class ArticleUpdateService:
     commiter: Commiter
 
     async def __call__(self, dto: ArticleUpdateDTO) -> Article:
-        article: Article = await self.article_repository.get_by_id(dto.id)
+        article: Article | None = await self.article_repository.get_by_id(dto.id)
+        if article is None:
+            raise DoesNotExist(obj_name="Article", obj_id=dto.id)
+
         for slot in dto.__slots__:  # noqa
             if slot == "id":
                 continue
