@@ -1,7 +1,8 @@
-from sqlalchemy import select
+from sqlalchemy import select, asc, desc
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 
+from application.common.enums.sort_order import SortOrder
 from domain.entities.article.models import Article, ArticleId, ArticleStatus
 
 
@@ -9,8 +10,19 @@ class ArticleRepositoryImpl:
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    async def get_all(self, limit: int, offset: int) -> list[Article | None]:
-        stmt = select(Article).limit(limit).offset(offset)
+    async def get_list(
+        self, offset: int, limit: int, order: SortOrder
+    ) -> list[Article | None]:
+        stmt = (
+            select(Article)
+            .limit(limit)
+            .offset(offset)
+            .options(joinedload(Article.author))
+        )
+        if order == SortOrder.ASC:
+            stmt.order_by(asc(Article.id))
+        elif order == SortOrder.DESC:
+            stmt.order_by(desc(Article.id))
         result = await self.session.scalars(stmt)
         return list(result.all())
 

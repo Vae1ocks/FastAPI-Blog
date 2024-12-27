@@ -22,9 +22,8 @@ class ArticleReadDTO:
 @dataclass(frozen=True, slots=True)
 class ArticleListDTO:
     id: int
-    user: UserListDTO
-    title: str
-    body: str
+    author: UserListDTO
+    title: ArticleTitle
     created_at: datetime
     status: ArticleStatus | None = None
     updated_at: datetime | None = None

@@ -2,7 +2,6 @@ from dataclasses import dataclass
 
 import logging
 
-from application.commiter import Commiter
 from application.dto.article.article_update import ArticleUpdateDTO
 from application.errors.common.not_found import DoesNotExist
 from domain.entities.article.models import Article
@@ -15,7 +14,6 @@ logger = logging.getLogger(__name__)
 @dataclass
 class ArticleUpdateService:
     article_repository: ArticleRepository
-    commiter: Commiter
 
     async def __call__(self, dto: ArticleUpdateDTO) -> Article:
         article: Article | None = await self.article_repository.get_by_id(dto.id)
