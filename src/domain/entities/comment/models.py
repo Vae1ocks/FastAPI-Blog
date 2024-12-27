@@ -14,12 +14,13 @@ CommentId = NewType("CommentId", int)
 UTC_NOW = partial(datetime.now, UTC)
 
 
-@dataclass
+
+@dataclass(kw_only=True)
 class Comment:
-    id: CommentId
+    id: CommentId | None = None
     body: CommentBody
     created_at: datetime = field(default_factory=UTC_NOW, kw_only=True)
-    updated_at: datetime
+    updated_at: datetime | None = None
     article_id: "ArticleId"
     author_id: "UserId"
-    author: "User"
+    author: "User | None" = field(init=False)
