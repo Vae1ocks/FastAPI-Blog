@@ -1,7 +1,7 @@
 import logging
 from dataclasses import dataclass
 
-from application.errors.user import TokenInvalid
+from application.errors.user import TokenInvalid, AuthenticationError
 from domain.entities.user.models import UserId
 from infrastructure.ports.request_context.access_jwt_request_handler import (
     AccessJWTTokenRequestHandler,
@@ -41,7 +41,9 @@ class JWTTokenManager:
         return UserId(user_id) if user_id else None
 
     def get_subject_id_from_request_token(self) -> UserId:
-        token: str | bytes = self.get_access_token_from_request()
+        token: str | bytes | None = self.get_access_token_from_request()
+        if token is None:
+            raise AuthenticationError("Not authenticated")
         self.validate_access_token_scheme(token)
         token: str = self.remove_auth_scheme_from_token(token=token)
         return self.get_subject_id_from_token(token=token)
