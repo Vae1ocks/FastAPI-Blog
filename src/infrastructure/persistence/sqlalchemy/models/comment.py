@@ -26,12 +26,12 @@ comments_table = sa.Table(
     ),
     sa.Column(
         "created_at",
-        sa.DateTime,
+        sa.TIMESTAMP(timezone=True),
         server_default=sa.text("(now() at time zone 'utc')"),
     ),
     sa.Column(
         "updated_at",
-        sa.DateTime,
+        sa.TIMESTAMP(timezone=True),
         default=None,
         onupdate=UTC_NOW,
     ),
