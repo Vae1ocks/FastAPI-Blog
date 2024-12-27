@@ -1,6 +1,6 @@
 from application.dto.article.article_read import ArticleReadDTO, ArticleListDTO
 from application.dto.user.user_read import UserListDTO
-from application.mappers.comment.model_to_dto import CommentToDTOMapper
+from application.mappers.comment.model_to_dto import CommentModelToDTOMapper
 from application.mappers.user.user_to_dto import UserToDTOMapper
 from domain.entities.article.models import Article
 
@@ -11,7 +11,7 @@ class ArticleModelToDTOMapper:
         user_dto = UserToDTOMapper.to_list_dto(user=model.author)
         comments_dtos = []
         for comment in model.comments:
-            comments_dtos.append(CommentToDTOMapper.to_list_dto(comment=comment))
+            comments_dtos.append(CommentModelToDTOMapper.to_read_dto(model=comment))
         return ArticleReadDTO(
             id=model.id,
             author=user_dto,

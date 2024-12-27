@@ -5,6 +5,8 @@ from application.services.article.create import ArticleCreateService
 from application.services.article.delete import ArticleDeleteService
 from application.services.article.read import ArticleReadService
 from application.services.article.update import ArticleUpdateService
+from application.services.comment.create import CommentCreateService
+from application.services.comment.update import CommentUpdateService
 from application.services.jwt.refresh import RefreshTokenService
 from application.services.user.checker import UserCheckerService
 from application.services.user.login import LoginUsernamePasswordService
@@ -13,6 +15,8 @@ from application.use_cases.article.create import ArticleCreateUseCase
 from application.use_cases.article.delete import ArticleDeleteUseCase
 from application.use_cases.article.read import ArticleReadDetailUseCase, ArticleListUseCase
 from application.use_cases.article.update import ArticleUpdateUseCase
+from application.use_cases.comment.create import CommentCreateUseCase
+from application.use_cases.comment.update import CommentUpdateUseCase
 from application.use_cases.user.login import LoginUseCase, RefreshUseCase
 from application.use_cases.user.registration import (
     RegistrationUseCase,
@@ -79,3 +83,10 @@ class ApplicationProvider(Provider):
     article_list_usecase = provide(
         source=ArticleListUseCase,
     )
+    comment_create_service = provide(
+        source=CommentCreateService,
+    )
+    comment_create_usecase = provide(
+        source=CommentCreateUseCase,
+    )
+

@@ -10,6 +10,7 @@ from application.processors.email_sender import MailSender
 from application.processors.file_operators import ImageChecker, ImageLoader
 from application.processors.password_hasher import PasswordHasher
 from domain.repositories.article_repository import ArticleRepository
+from domain.repositories.comment_repository import CommentRepository
 from domain.repositories.user_repository import UserRepository
 from infrastructure.managers.jwt import JWTTokenManager
 from infrastructure.ports.request_context.access_jwt_request_handler import (
@@ -34,6 +35,7 @@ from infrastructure.processors.password_hasher_bcrypt import BcryptPasswordHashe
 from infrastructure.repositories.sqlalchemy.article_repository import (
     ArticleRepositoryImpl,
 )
+from infrastructure.repositories.sqlalchemy.comment_repository import CommentRepositoryImpl
 from infrastructure.repositories.sqlalchemy.user_repository import UserRepositoryImpl
 from infrastructure.types import PasswordPepper, JWTAlgorithm, JWTSecret, JWTAuthScheme
 from setup.configs import AllConfigs
@@ -145,5 +147,11 @@ class InfrastructureProvider(Provider):
     article_repository = provide(
         source=ArticleRepositoryImpl,
         provides=ArticleRepository,
+        scope=Scope.REQUEST,
+    )
+
+    comment_repository = provide(
+        source=CommentRepositoryImpl,
+        provides=CommentRepository,
         scope=Scope.REQUEST,
     )

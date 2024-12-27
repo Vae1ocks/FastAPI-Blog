@@ -9,7 +9,7 @@ class CommentDTOToSchemeMapper:
         author = UserDTOToSchemeMapper.to_list_scheme(dto=dto.author)
         return CommentReadScheme(
             id=dto.id,
-            body=dto.body,
+            body=dto.body.value,
             author=author,
             created_at=dto.created_at,
             updated_at=dto.updated_at,

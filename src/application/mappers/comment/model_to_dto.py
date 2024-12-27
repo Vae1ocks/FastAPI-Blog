@@ -3,14 +3,14 @@ from application.mappers.user.user_to_dto import UserToDTOMapper
 from domain.entities.comment.models import Comment
 
 
-class CommentToDTOMapper:
+class CommentModelToDTOMapper:
     @staticmethod
-    def to_list_dto(comment: Comment) -> CommentReadDTO:
-        author = UserToDTOMapper.to_list_dto(user=comment.author)
+    def to_read_dto(model: Comment) -> CommentReadDTO:
+        author = UserToDTOMapper.to_list_dto(user=model.author)
         return CommentReadDTO(
-            id=comment.id,
-            body=str(comment.body),
+            id=model.id,
+            body=model.body,
             author=author,
-            created_at=comment.created_at,
-            updated_at=comment.updated_at,
+            created_at=model.created_at,
+            updated_at=model.updated_at,
         )
