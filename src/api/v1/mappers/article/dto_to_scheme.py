@@ -36,7 +36,7 @@ class ArticleDTOToSchemeMapper:
             author_scheme = UserDTOToSchemeMapper.to_list_scheme(dto=dto.author)
             scheme = ArticleListScheme(
                 id=dto.id,
-                title=dto.title,
+                title=dto.title.value,
                 status=dto.status,
                 author=author_scheme,
                 created_at=dto.created_at,
