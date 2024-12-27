@@ -89,4 +89,9 @@ class ApplicationProvider(Provider):
     comment_create_usecase = provide(
         source=CommentCreateUseCase,
     )
-
+    comment_update_service = provide(
+        source=CommentUpdateService,
+    )
+    comment_update_usecase = provide(
+        source=CommentUpdateUseCase,
+    )

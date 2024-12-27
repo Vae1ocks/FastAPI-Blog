@@ -17,3 +17,12 @@ class CommentSchemeToDTOMapper:
             body=CommentBody(scheme.body),
             author_id=None,
         )
+
+    @staticmethod
+    def to_update_dto(
+        scheme: CommentUpdateScheme, comment_id: CommentId
+    ) -> CommentUpdateDTO:
+        return CommentUpdateDTO(
+            id=comment_id,
+            body=CommentBody(scheme.body),
+        )
