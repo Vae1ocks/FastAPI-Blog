@@ -6,6 +6,7 @@ from application.services.article.delete import ArticleDeleteService
 from application.services.article.read import ArticleReadService
 from application.services.article.update import ArticleUpdateService
 from application.services.comment.create import CommentCreateService
+from application.services.comment.delete import CommentDeleteService
 from application.services.comment.update import CommentUpdateService
 from application.services.jwt.refresh import RefreshTokenService
 from application.services.user.checker import UserCheckerService
@@ -16,6 +17,7 @@ from application.use_cases.article.delete import ArticleDeleteUseCase
 from application.use_cases.article.read import ArticleReadDetailUseCase, ArticleListUseCase
 from application.use_cases.article.update import ArticleUpdateUseCase
 from application.use_cases.comment.create import CommentCreateUseCase
+from application.use_cases.comment.delete import CommentDeleteUseCase
 from application.use_cases.comment.update import CommentUpdateUseCase
 from application.use_cases.user.login import LoginUseCase, RefreshUseCase
 from application.use_cases.user.registration import (
@@ -94,4 +96,10 @@ class ApplicationProvider(Provider):
     )
     comment_update_usecase = provide(
         source=CommentUpdateUseCase,
+    )
+    comment_delete_service = provide(
+        source=CommentDeleteService,
+    )
+    comment_delete_usecase = provide(
+        source=CommentDeleteUseCase,
     )

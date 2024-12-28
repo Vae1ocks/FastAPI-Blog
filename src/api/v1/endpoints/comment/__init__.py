@@ -1,1 +1,1 @@
-from . import create, update
+from . import create, update, delete

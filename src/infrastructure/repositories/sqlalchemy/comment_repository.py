@@ -27,9 +27,5 @@ class CommentRepositoryImpl:
     def add(self, comment: Comment) -> None:
         self.session.add(comment)
 
-    async def delete(self, comment_id: Comment) -> None:
-        stmt = select(Comment).where(Comment.id == comment_id)
-        comment = (await self.session.execute(stmt)).scalar_one_or_none()
-        if comment is None:
-            raise ValueError(f"Comment with id={comment_id} does not exist.")
+    async def delete(self, comment: Comment) -> None:
         await self.session.delete(comment)
