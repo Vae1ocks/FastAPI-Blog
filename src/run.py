@@ -32,4 +32,5 @@ if __name__ == "__main__":
         host=all_configs.uvicorn.host,
         port=all_configs.uvicorn.port,
         reload=all_configs.uvicorn.reload,
+        loop="uvloop",
     )
