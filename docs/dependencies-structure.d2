@@ -1,0 +1,401 @@
+scope1: "Scope.APP"{
+component2: "Scope.APP"{
+factory3: "📥 AsyncContainer"{
+    shape: class
+}
+
+factory4: "🏭 AllConfigs"{
+    shape: class
+    "ConfigProvider.provide_configs()": ""
+}
+
+factory5: "🏭 AsyncEngine"{
+    shape: class
+    "DatabaseProvider.provide_async_engine()": ""
+    AllConfigs
+}
+
+factory6: "🏭 async_sessionmaker_AsyncSession_"{
+    shape: class
+    "DatabaseProvider.provide_async_session_maker()": ""
+    AsyncEngine
+    AllConfigs
+}
+
+factory7: "🏭 PasswordPepper"{
+    shape: class
+    "InfrastructureProvider.provide_password_pepper()": ""
+    AllConfigs
+}
+
+factory8: "🏭 PasswordHasher"{
+    shape: class
+    "BcryptPasswordHasher()": ""
+    PasswordPepper
+}
+
+factory9: "🏭 ImageChecker"{
+    shape: class
+    "ImageCheckerImpl()": ""
+}
+
+factory10: "🏭 ImageLoader"{
+    shape: class
+    "InfrastructureProvider.provide_image_loader()": ""
+    AllConfigs
+}
+
+factory11: "🏭 RandomCodeGenerator"{
+    shape: class
+    "InfrastructureProvider.provide_code_generator()": ""
+    AllConfigs
+}
+
+factory12: "🏭 MailSender"{
+    shape: class
+    "InfrastructureProvider.provide_email_sender()": ""
+    AllConfigs
+}
+
+factory13: "🏭 JWTGeneralTokenProcessor"{
+    shape: class
+    "InfrastructureProvider.provide_jwt_general_processor()": ""
+    AllConfigs
+}
+
+factory14: "🏭 JWTAccessTokenProcessor"{
+    shape: class
+    "InfrastructureProvider.provide_jwt_access_processor()": ""
+    JWTGeneralTokenProcessor
+    AllConfigs
+}
+
+factory15: "🏭 JWTRefreshTokenProcessor"{
+    shape: class
+    "InfrastructureProvider.provide_jwt_refresh_processor()": ""
+    JWTGeneralTokenProcessor
+    AllConfigs
+}
+
+factory16: "🏭 JWTTokenProcessor"{
+    shape: class
+    "JWTTokenProcessor()": ""
+    JWTAccessTokenProcessor
+    JWTRefreshTokenProcessor
+}
+
+factory17: "🏭 JWTAuthScheme"{
+    shape: class
+    "InfrastructureRequestContextProvider.provide_jwt_auth_scheme()": ""
+    AllConfigs
+}
+
+}
+
+}
+scope1.component2.factory4 --> scope1.component2.factory5
+scope1.component2.factory5 --> scope1.component2.factory6
+scope1.component2.factory4 --> scope1.component2.factory6
+scope1.component2.factory4 --> scope1.component2.factory7
+scope1.component2.factory7 --> scope1.component2.factory8
+scope1.component2.factory4 --> scope1.component2.factory10
+scope1.component2.factory4 --> scope1.component2.factory11
+scope1.component2.factory4 --> scope1.component2.factory12
+scope1.component2.factory4 --> scope1.component2.factory13
+scope1.component2.factory13 --> scope1.component2.factory14
+scope1.component2.factory4 --> scope1.component2.factory14
+scope1.component2.factory13 --> scope1.component2.factory15
+scope1.component2.factory4 --> scope1.component2.factory15
+scope1.component2.factory14 --> scope1.component2.factory16
+scope1.component2.factory15 --> scope1.component2.factory16
+scope1.component2.factory4 --> scope1.component2.factory17
+scope18: "Scope.REQUEST"{
+component19: "Scope.REQUEST"{
+factory20: "📥 AsyncContainer"{
+    shape: class
+}
+
+factory21: "🏭 AsyncSession"{
+    shape: class
+    "DatabaseProvider.provide_async_session()": ""
+    async_sessionmaker_AsyncSession_
+}
+
+factory22: "🏭 Ⓘ UserRepository"{
+    shape: class
+    "UserRepositoryImpl()": ""
+    AsyncSession
+}
+
+factory23: "🏭 IdentityProvider"{
+    shape: class
+    "JWTIdentityProvider()": ""
+    JWTTokenManager
+}
+
+factory24: "🏭 Ⓘ ArticleRepository"{
+    shape: class
+    "ArticleRepositoryImpl()": ""
+    AsyncSession
+}
+
+factory25: "🏭 Ⓘ CommentRepository"{
+    shape: class
+    "CommentRepositoryImpl()": ""
+    AsyncSession
+}
+
+factory26: "🏭 AccessJWTTokenRequestHandler"{
+    shape: class
+    "HeadersAccessJWTTokenRequestHandler()": ""
+    JWTAuthScheme
+    Request
+}
+
+factory27: "🏭 JWTTokenManager"{
+    shape: class
+    "JWTTokenManager()": ""
+    JWTTokenProcessor
+    AccessJWTTokenRequestHandler
+    JWTAuthScheme
+}
+
+factory28: "📥 Request"{
+    shape: class
+}
+
+factory29: "🏭 UserRegistrationService"{
+    shape: class
+    "UserRegistrationService()": ""
+    UserRepository
+    PasswordHasher
+    ImageChecker
+    ImageLoader
+    Commiter
+}
+
+factory30: "🏭 RegistrationUseCase"{
+    shape: class
+    "RegistrationUseCase()": ""
+    UserRegistrationService
+    RandomCodeGenerator
+    MailSender
+    Commiter
+}
+
+factory31: "🏭 RegistrationConfirmationUseCase"{
+    shape: class
+    "RegistrationConfirmationUseCase()": ""
+    UserRegistrationService
+    Commiter
+}
+
+factory32: "🏭 UserCheckerService"{
+    shape: class
+    "UserCheckerService()": ""
+    UserRepository
+    Commiter
+}
+
+factory33: "🏭 LoginUsernamePasswordService"{
+    shape: class
+    "LoginUsernamePasswordService()": ""
+    UserRepository
+    JWTTokenProcessor
+    PasswordHasher
+    Commiter
+}
+
+factory34: "🏭 LoginUseCase"{
+    shape: class
+    "LoginUseCase()": ""
+    IdentityProvider
+    UserCheckerService
+    LoginUsernamePasswordService
+}
+
+factory35: "🏭 Commiter"{
+    shape: class
+    "SqlaCommiter()": ""
+    AsyncSession
+}
+
+factory36: "🏭 RefreshTokenService"{
+    shape: class
+    "RefreshTokenService()": ""
+    JWTTokenProcessor
+    UserCheckerService
+}
+
+factory37: "🏭 RefreshUseCase"{
+    shape: class
+    "RefreshUseCase()": ""
+    RefreshTokenService
+}
+
+factory38: "🏭 ArticleCreateService"{
+    shape: class
+    "ArticleCreateService()": ""
+    ArticleRepository
+    Commiter
+}
+
+factory39: "🏭 ArticleCreateUseCase"{
+    shape: class
+    "ArticleCreateUseCase()": ""
+    ArticleCreateService
+    JWTTokenManager
+}
+
+factory40: "🏭 ArticleUpdateService"{
+    shape: class
+    "ArticleUpdateService()": ""
+    ArticleRepository
+}
+
+factory41: "🏭 ArticleUpdateUseCase"{
+    shape: class
+    "ArticleUpdateUseCase()": ""
+    ArticleUpdateService
+    JWTTokenManager
+    Commiter
+}
+
+factory42: "🏭 ArticleDeleteService"{
+    shape: class
+    "ArticleDeleteService()": ""
+    ArticleRepository
+}
+
+factory43: "🏭 ArticleDeleteUseCase"{
+    shape: class
+    "ArticleDeleteUseCase()": ""
+    ArticleDeleteService
+    Commiter
+    JWTTokenManager
+}
+
+factory44: "🏭 ArticleReadService"{
+    shape: class
+    "ArticleReadService()": ""
+    ArticleRepository
+}
+
+factory45: "🏭 ArticleReadDetailUseCase"{
+    shape: class
+    "ArticleReadDetailUseCase()": ""
+    ArticleReadService
+}
+
+factory46: "🏭 ArticleListUseCase"{
+    shape: class
+    "ArticleListUseCase()": ""
+    ArticleReadService
+}
+
+factory47: "🏭 CommentCreateService"{
+    shape: class
+    "CommentCreateService()": ""
+    CommentRepository
+    Commiter
+}
+
+factory48: "🏭 CommentCreateUseCase"{
+    shape: class
+    "CommentCreateUseCase()": ""
+    CommentCreateService
+    JWTTokenManager
+}
+
+factory49: "🏭 CommentUpdateService"{
+    shape: class
+    "CommentUpdateService()": ""
+    CommentRepository
+}
+
+factory50: "🏭 CommentUpdateUseCase"{
+    shape: class
+    "CommentUpdateUseCase()": ""
+    CommentUpdateService
+    Commiter
+    JWTTokenManager
+}
+
+factory51: "🏭 CommentDeleteService"{
+    shape: class
+    "CommentDeleteService()": ""
+    CommentRepository
+}
+
+factory52: "🏭 CommentDeleteUseCase"{
+    shape: class
+    "CommentDeleteUseCase()": ""
+    CommentDeleteService
+    JWTTokenManager
+    Commiter
+}
+
+}
+
+}
+scope1.component2.factory6 --> scope18.component19.factory21
+scope18.component19.factory21 --> scope18.component19.factory22
+scope18.component19.factory27 --> scope18.component19.factory23
+scope18.component19.factory21 --> scope18.component19.factory24
+scope18.component19.factory21 --> scope18.component19.factory25
+scope1.component2.factory17 --> scope18.component19.factory26
+scope18.component19.factory28 --> scope18.component19.factory26
+scope1.component2.factory16 --> scope18.component19.factory27
+scope18.component19.factory26 --> scope18.component19.factory27
+scope1.component2.factory17 --> scope18.component19.factory27
+scope18.component19.factory22 --> scope18.component19.factory29
+scope1.component2.factory8 --> scope18.component19.factory29
+scope1.component2.factory9 --> scope18.component19.factory29
+scope1.component2.factory10 --> scope18.component19.factory29
+scope18.component19.factory35 --> scope18.component19.factory29
+scope18.component19.factory29 --> scope18.component19.factory30
+scope1.component2.factory11 --> scope18.component19.factory30
+scope1.component2.factory12 --> scope18.component19.factory30
+scope18.component19.factory35 --> scope18.component19.factory30
+scope18.component19.factory29 --> scope18.component19.factory31
+scope18.component19.factory35 --> scope18.component19.factory31
+scope18.component19.factory22 --> scope18.component19.factory32
+scope18.component19.factory35 --> scope18.component19.factory32
+scope18.component19.factory22 --> scope18.component19.factory33
+scope1.component2.factory16 --> scope18.component19.factory33
+scope1.component2.factory8 --> scope18.component19.factory33
+scope18.component19.factory35 --> scope18.component19.factory33
+scope18.component19.factory23 --> scope18.component19.factory34
+scope18.component19.factory32 --> scope18.component19.factory34
+scope18.component19.factory33 --> scope18.component19.factory34
+scope18.component19.factory21 --> scope18.component19.factory35
+scope1.component2.factory16 --> scope18.component19.factory36
+scope18.component19.factory32 --> scope18.component19.factory36
+scope18.component19.factory36 --> scope18.component19.factory37
+scope18.component19.factory24 --> scope18.component19.factory38
+scope18.component19.factory35 --> scope18.component19.factory38
+scope18.component19.factory38 --> scope18.component19.factory39
+scope18.component19.factory27 --> scope18.component19.factory39
+scope18.component19.factory24 --> scope18.component19.factory40
+scope18.component19.factory40 --> scope18.component19.factory41
+scope18.component19.factory27 --> scope18.component19.factory41
+scope18.component19.factory35 --> scope18.component19.factory41
+scope18.component19.factory24 --> scope18.component19.factory42
+scope18.component19.factory42 --> scope18.component19.factory43
+scope18.component19.factory35 --> scope18.component19.factory43
+scope18.component19.factory27 --> scope18.component19.factory43
+scope18.component19.factory24 --> scope18.component19.factory44
+scope18.component19.factory44 --> scope18.component19.factory45
+scope18.component19.factory44 --> scope18.component19.factory46
+scope18.component19.factory25 --> scope18.component19.factory47
+scope18.component19.factory35 --> scope18.component19.factory47
+scope18.component19.factory47 --> scope18.component19.factory48
+scope18.component19.factory27 --> scope18.component19.factory48
+scope18.component19.factory25 --> scope18.component19.factory49
+scope18.component19.factory49 --> scope18.component19.factory50
+scope18.component19.factory35 --> scope18.component19.factory50
+scope18.component19.factory27 --> scope18.component19.factory50
+scope18.component19.factory25 --> scope18.component19.factory51
+scope18.component19.factory51 --> scope18.component19.factory52
+scope18.component19.factory27 --> scope18.component19.factory52
+scope18.component19.factory35 --> scope18.component19.factory52
