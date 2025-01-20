@@ -26,6 +26,7 @@ aiofiles = "^24.1.0"
 orjson = "^3.10.12"
 dishka = "^1.4.2"
 logging = "^0.4.9.6"
+uvloop = "^0.21.0"
 
 
 [build-system]
