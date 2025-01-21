@@ -7,6 +7,7 @@ into an account, and view articles. CRUD for Articles, Comments and Users entiti
 
 <p align="center">
   <img src="docs/dishka_d2.svg" alt="DishkaD2" />
+  <br><em><b>Dependencies structure. You can get more detailed view if you go to docs/dishka_d2.svg and download file (or go to docs/dependencies-structure.d2 and paste it into https://play.d2lang.com/)</b></em>
 </p>
 
 ENV Vars:
