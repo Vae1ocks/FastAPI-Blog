@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from typing import BinaryIO
 
 from application.commiter import Commiter
+from application.dto.other.file import FileDTO
 from application.dto.other.int_code import ConfirmationCodesDTO
 from application.errors.common.code_mismatch import CodeMismatchError
 from application.errors.user import (
@@ -86,7 +87,7 @@ class UserRegistrationService:
 
         raise UserUsernameEmailAlreadyExistsError(username=username, email=email)
 
-    async def _process_user_image(self, file: BinaryIO):
-        self.image_checker.check(file)
+    async def _process_user_image(self, file: FileDTO):
+        self.image_checker.check(file.file)
         image_path = await self.image_loader(image=file)
         return image_path

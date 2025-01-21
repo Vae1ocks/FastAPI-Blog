@@ -13,7 +13,6 @@ class UserDTOToSchemeMapper:
             is_active=dto.is_active,
             is_superuser=dto.is_superuser,
             email=dto.email,
-            image_path=dto.image_path,
         )
 
     @staticmethod
@@ -21,7 +20,6 @@ class UserDTOToSchemeMapper:
         return UserListScheme(
             id=dto.id,
             username=dto.username,
-            image_path=dto.image_path,
         )
 
     @staticmethod

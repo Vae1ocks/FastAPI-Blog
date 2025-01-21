@@ -5,6 +5,7 @@ from PIL import Image, UnidentifiedImageError
 from pathlib import Path
 import aiofiles
 
+from application.dto.other.file import FileDTO
 from application.errors.common.validation import FileNotImageError
 from application.processors.file_operators import ImageChecker, ImageLoader
 
@@ -24,7 +25,7 @@ class FileSystemImageLoader(ImageLoader):
         self.directory = Path(directory)
         self.file_name_pattern = file_name_patter
 
-    async def __call__(self, image: BinaryIO):
+    async def __call__(self, image: FileDTO):
         path = Path(self.directory)
         file_extension = Path(image.filename).suffix
         timestamp = datetime.now(UTC).strftime(
@@ -33,7 +34,7 @@ class FileSystemImageLoader(ImageLoader):
         filepath = path / f"{timestamp}{file_extension}"
 
         async with aiofiles.open(filepath, "wb") as _file:
-            contents = image.read()
+            contents = image.file.read()
             await _file.write(contents)
 
         return str(filepath)

@@ -1,3 +1,4 @@
+from api.v1.mappers.other.file.to_dto import UploadFileToDTOMapper
 from api.v1.schemes.user.login import LoginScheme
 from api.v1.schemes.user.user_create import UserCreateScheme
 from api.v1.schemes.user.user_read import UserReadScheme
@@ -24,7 +25,7 @@ class UserSchemeToDTOMapper:
             username=scheme.username,
             email=scheme.email,
             password=scheme.password,
-            image=scheme.image,
+            image=UploadFileToDTOMapper.to_dto(file=scheme.image),
         )
 
     @staticmethod

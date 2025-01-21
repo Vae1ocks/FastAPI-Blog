@@ -8,7 +8,6 @@ from application.dto.user.user_create import UserCreateDTO
 from application.processors.code_generator import RandomCodeGenerator
 from application.processors.email_sender import MailSender
 from application.services.user.user_registration import UserRegistrationService
-from application.uow import UnitOfWork
 from domain.entities.user.models import User
 
 
@@ -25,7 +24,7 @@ class RegistrationUseCase:
             )
             code = self.code_generator()
             message = f"Your confirmation code to process the registration: {code}"
-            task = self.mail_sender.send(
+            self.mail_sender.send(
                 targets=[user.email],
                 subject="Confirmation code",
                 message=message,

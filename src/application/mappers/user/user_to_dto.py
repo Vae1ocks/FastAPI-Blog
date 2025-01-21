@@ -11,7 +11,6 @@ class UserToDTOMapper:
             is_active=user.is_active,
             is_superuser=user.is_superuser,
             email=user.email,
-            image_path=user.image_path,
         )
 
     @staticmethod
@@ -19,5 +18,4 @@ class UserToDTOMapper:
         return UserListDTO(
             id=user.id,
             username=user.username,
-            image_path=user.image_path,
         )

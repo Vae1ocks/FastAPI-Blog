@@ -27,9 +27,9 @@ async def user_data_input(
     image: UploadFile | None = None,
 ):
     request_scheme = UserCreateScheme(
-        image=image.file if image else None,
+        image=image,
         username=username,
-        email=email,
+        email=str(email),
         password=password,
     )
     request_dto: UserCreateDTO = UserSchemeToDTOMapper.to_create_dto(

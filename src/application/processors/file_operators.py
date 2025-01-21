@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import BinaryIO
 
+from application.dto.other.file import FileDTO
+
 
 class ImageChecker(ABC):
     @staticmethod
@@ -11,5 +13,5 @@ class ImageChecker(ABC):
 
 class ImageLoader(ABC):
     @abstractmethod
-    def __call__(self, image: BinaryIO):
+    def __call__(self, image: FileDTO):
         ...

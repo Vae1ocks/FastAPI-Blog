@@ -47,7 +47,7 @@ class CodeGeneratorConfig(BaseSettingsConfig):
 class JWTConfig(BaseSettingsConfig):
     secret: str
     algorithm: str
-    access_expire_minutes: int = 5
+    access_expire_minutes: int = 1000
     access_token_type: str = "access"
     refresh_expire_days: int = 30
     refresh_token_type: str = "refresh"
