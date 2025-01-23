@@ -2,8 +2,7 @@
 
 This FastAPI CRUD web app represents my interpretation of Clean Architecture.
 
-The project's functionality is a primitive blog: users can register, log
-into an account, and view articles. CRUD for Articles, Comments and Users entities.
+The project's functionality is a primitive blog: users can register, login to account, and view articles. CRUD for Articles, Comments and Users entities.
 
 <p align="center">
   <img src="docs/dishka_d2.svg" alt="DishkaD2" />
